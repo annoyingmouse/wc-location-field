@@ -499,6 +499,74 @@ describe('status messages', () => {
   })
 })
 
+// ─── radiusKm getter ──────────────────────────────────────────────────────────
+
+describe('radiusKm getter', () => {
+  it('returns null when radius-km is absent', async () => {
+    const el = await fixture(html`<wc-location-field></wc-location-field>`)
+    expect(el.radiusKm).to.be.null
+  })
+
+  it('returns the numeric value when radius-km is set', async () => {
+    const el = await fixture(html`<wc-location-field radius-km="2.5"></wc-location-field>`)
+    expect(el.radiusKm).to.equal(2.5)
+  })
+
+  it('returns null when radius-km is a non-numeric string', async () => {
+    const el = await fixture(html`<wc-location-field radius-km="bad"></wc-location-field>`)
+    expect(el.radiusKm).to.be.null
+  })
+})
+
+// ─── geojson property ─────────────────────────────────────────────────────────
+
+describe('geojson property', () => {
+  const POLYGON = {
+    type: 'Polygon',
+    coordinates: [[[0.1, 52.3], [0.2, 52.3], [0.2, 52.4], [0.1, 52.4], [0.1, 52.3]]],
+  }
+
+  it('is null by default', async () => {
+    const el = await fixture(html`<wc-location-field></wc-location-field>`)
+    expect(el.geojson).to.be.null
+  })
+
+  it('stores an object assigned to the property', async () => {
+    const el = await fixture(html`<wc-location-field></wc-location-field>`)
+    el.geojson = POLYGON
+    expect(el.geojson).to.deep.equal(POLYGON)
+  })
+
+  it('parses a JSON string assigned to the property', async () => {
+    const el = await fixture(html`<wc-location-field></wc-location-field>`)
+    el.geojson = JSON.stringify(POLYGON)
+    expect(el.geojson).to.deep.equal(POLYGON)
+  })
+
+  it('_overlayLayer is null initially', async () => {
+    const el = await fixture(html`<wc-location-field></wc-location-field>`)
+    expect(el._overlayLayer).to.be.null
+  })
+})
+
+// ─── _mapCentre() ─────────────────────────────────────────────────────────────
+
+describe('_mapCentre()', () => {
+  it('returns center-lat/center-lng when set and no geojson', async () => {
+    const el = await fixture(html`<wc-location-field center-lat="52.5" center-lng="0.3"></wc-location-field>`)
+    const centre = el._mapCentre()
+    expect(centre[0]).to.equal(52.5)
+    expect(centre[1]).to.equal(0.3)
+  })
+
+  it('falls back to [51.505, -0.09] when no center-lat and no geojson', async () => {
+    const el = await fixture(html`<wc-location-field></wc-location-field>`)
+    const centre = el._mapCentre()
+    expect(centre[0]).to.equal(51.505)
+    expect(centre[1]).to.equal(-0.09)
+  })
+})
+
 // ─── Multiple instances ───────────────────────────────────────────────────────
 
 describe('multiple instances', () => {

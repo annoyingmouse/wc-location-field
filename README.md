@@ -44,6 +44,7 @@ With map:
 | `center-lat` / `center-lng` | Map centre and Nominatim search bias |
 | `show-map` | Renders an interactive Leaflet map |
 | `w3w-key` | What3Words API key; enables `///word.word.word` search |
+| `radius-km` | Draws a circle overlay on the map (requires `show-map`, `center-lat`, `center-lng`) |
 
 ## Public API
 
@@ -62,6 +63,9 @@ console.log(field.value, field.lat, field.lng, field.address)
 // label and placeholder can also be set as JS properties
 field.label = 'Destination'
 field.placeholder = 'Search for a place…'
+
+// Set a GeoJSON boundary overlay on the map (polygon/feature drawn, map centred on its bounds)
+field.geojson = { type: 'Polygon', coordinates: [[[0.1, 52.3], [0.2, 52.3], [0.2, 52.4], [0.1, 52.4], [0.1, 52.3]]] }
 ```
 
 ## Events

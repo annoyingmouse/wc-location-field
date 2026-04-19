@@ -14,6 +14,8 @@ class LocationField extends HTMLElement {
     this._w3w = "";
     this._map = null;
     this._marker = null;
+    this._overlayLayer = null;
+    this._geojson = null;
     this._timer = null;
     this._results = [];
     this._inputEl = null;
@@ -61,6 +63,22 @@ class LocationField extends HTMLElement {
   /** Optional What3Words API key — enables W3W search and reverse-geocode */
   get w3wKey() {
     return this.getAttribute("w3w-key") || null;
+  }
+
+  /** Radius in km — draws a circle overlay on the map when show-map is set */
+  get radiusKm() {
+    const v = parseFloat(this.getAttribute("radius-km"));
+    return isNaN(v) ? null : v;
+  }
+
+  /** GeoJSON object (or JSON string) — draws a polygon/feature overlay on the map */
+  set geojson(val) {
+    this._geojson = typeof val === "string" ? JSON.parse(val) : val;
+    if (this._map) this._applyOverlay();
+  }
+
+  get geojson() {
+    return this._geojson;
   }
 
   // ── Public state getters ──────────────────────────────────────────────────
@@ -184,7 +202,7 @@ class LocationField extends HTMLElement {
     if (!el || typeof L === "undefined") return;
     if (this._map) { this._map.remove(); this._map = null; }
 
-    const centre = [this.centerLat ?? 51.505, this.centerLng ?? -0.09];
+    const centre = this._mapCentre();
     this._map = L.map(el, { maxZoom: 19 }).setView(centre, 13);
 
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -192,6 +210,7 @@ class LocationField extends HTMLElement {
       maxZoom: 19,
     }).addTo(this._map);
 
+    this._applyOverlay();
     this._placeMarker(...centre);
 
     this._map.on("click", async (e) => {
@@ -200,6 +219,34 @@ class LocationField extends HTMLElement {
     });
 
     this._map.invalidateSize();
+  }
+
+  _mapCentre() {
+    if (this._geojson) {
+      try {
+        const layer = L.geoJSON(this._geojson);
+        const b = layer.getBounds();
+        if (b.isValid()) return [b.getCenter().lat, b.getCenter().lng];
+      } catch { /* fall through */ }
+    }
+    return [this.centerLat ?? 51.505, this.centerLng ?? -0.09];
+  }
+
+  _applyOverlay() {
+    if (!this._map) return;
+    if (this._overlayLayer) {
+      this._overlayLayer.remove();
+      this._overlayLayer = null;
+    }
+    const style = { color: "#4a7c6f", fillColor: "#d4e8e3", fillOpacity: 0.15, weight: 1.5 };
+    if (this._geojson) {
+      this._overlayLayer = L.geoJSON(this._geojson, { style }).addTo(this._map);
+    } else if (this.centerLat !== null && this.radiusKm !== null) {
+      this._overlayLayer = L.circle(
+        [this.centerLat, this.centerLng],
+        { radius: this.radiusKm * 1000, ...style }
+      ).addTo(this._map);
+    }
   }
 
   _placeMarker(lat, lng) {
