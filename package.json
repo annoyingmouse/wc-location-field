@@ -7,7 +7,8 @@
   "scripts": {
     "test": "web-test-runner",
     "test:dist": "web-test-runner --config web-test-runner.dist.config.mjs",
-    "build": "rollup -c"
+    "build": "rollup -c",
+    "release": "npm run build && npm publish --access public"
   },
   "repository": {
     "type": "git",
