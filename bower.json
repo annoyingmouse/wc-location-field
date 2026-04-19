@@ -1,0 +1,22 @@
+{
+  "name": "wc-location-field",
+  "description": "A web component for location selection with address search, interactive map, geolocation, and What3Words support.",
+  "main": "wc-location-field.js",
+  "keywords": [
+    "web-component",
+    "custom-element",
+    "location",
+    "geocoding",
+    "nominatim",
+    "leaflet",
+    "geolocation",
+    "what3words",
+    "accessibility",
+    "a11y"
+  ],
+  "authors": [
+    "Dominic Myers"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/annoyingmouse/wc-location-field"
+}
