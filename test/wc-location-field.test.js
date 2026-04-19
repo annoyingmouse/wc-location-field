@@ -337,4 +337,180 @@ describe('keyboard navigation', () => {
     const items = el.querySelectorAll('.lf-suggestions li[role="option"]:not([aria-disabled])')
     items.forEach(li => expect(li.id).to.not.equal(''))
   })
+
+  it('ArrowDown twice marks the second option active', async () => {
+    const el = await fixture(html`<wc-location-field></wc-location-field>`)
+    await openSuggestions(el)
+    const input = el.querySelector('.lf-input')
+    input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }))
+    input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }))
+    const items = el.querySelectorAll('.lf-suggestions li[role="option"]:not([aria-disabled])')
+    expect(items[1].classList.contains('lf-active')).to.be.true
+    expect(items[0].classList.contains('lf-active')).to.be.false
+  })
+
+  it('ArrowUp moves back to the previous option', async () => {
+    const el = await fixture(html`<wc-location-field></wc-location-field>`)
+    await openSuggestions(el)
+    const input = el.querySelector('.lf-input')
+    input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }))
+    input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }))
+    input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowUp', bubbles: true }))
+    const items = el.querySelectorAll('.lf-suggestions li[role="option"]:not([aria-disabled])')
+    expect(items[0].classList.contains('lf-active')).to.be.true
+  })
+
+  it('ArrowDown does not go past the last option', async () => {
+    const el = await fixture(html`<wc-location-field></wc-location-field>`)
+    await openSuggestions(el)
+    const input = el.querySelector('.lf-input')
+    for (let i = 0; i < 10; i++) {
+      input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }))
+    }
+    const items = el.querySelectorAll('.lf-suggestions li[role="option"]:not([aria-disabled])')
+    expect(items[items.length - 1].classList.contains('lf-active')).to.be.true
+  })
+
+  it('ArrowUp does not go before the first option', async () => {
+    const el = await fixture(html`<wc-location-field></wc-location-field>`)
+    await openSuggestions(el)
+    const input = el.querySelector('.lf-input')
+    input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }))
+    for (let i = 0; i < 10; i++) {
+      input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowUp', bubbles: true }))
+    }
+    const items = el.querySelectorAll('.lf-suggestions li[role="option"]:not([aria-disabled])')
+    expect(items[0].classList.contains('lf-active')).to.be.true
+  })
+
+  it('Escape clears aria-activedescendant', async () => {
+    const el = await fixture(html`<wc-location-field></wc-location-field>`)
+    await openSuggestions(el)
+    const input = el.querySelector('.lf-input')
+    input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }))
+    input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }))
+    expect(input.getAttribute('aria-activedescendant')).to.equal('')
+  })
+
+  it('Enter on an active option fires location-change', async () => {
+    const el = await fixture(html`<wc-location-field></wc-location-field>`)
+    await openSuggestions(el)
+
+    // swap fetch for the reverse-geocode call triggered by _selectResult
+    window.fetch = () => Promise.resolve({
+      json: () => Promise.resolve({
+        display_name: 'Result One, London',
+        address: { road: 'Result One', city: 'London' },
+      }),
+    })
+
+    let detail = null
+    el.addEventListener('location-change', (e) => { detail = e.detail })
+
+    const input = el.querySelector('.lf-input')
+    input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }))
+    input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }))
+
+    await new Promise(r => setTimeout(r, 100))
+    expect(detail).to.exist
+    expect(detail.lat).to.equal(51.5)
+    expect(detail.lng).to.equal(-0.1)
+  })
+})
+
+// ─── Search behaviour ─────────────────────────────────────────────────────────
+
+describe('search behaviour', () => {
+  let originalFetch
+
+  beforeEach(() => { originalFetch = window.fetch })
+  afterEach(() => { window.fetch = originalFetch })
+
+  it('does not fetch when the query is fewer than 3 characters', async () => {
+    let called = false
+    window.fetch = () => { called = true; return Promise.resolve({ json: () => Promise.resolve([]) }) }
+    const el = await fixture(html`<wc-location-field></wc-location-field>`)
+    el.querySelector('.lf-input').value = 'Lo'
+    el.querySelector('.lf-input').dispatchEvent(new Event('input'))
+    await new Promise(r => setTimeout(r, 400))
+    expect(called).to.be.false
+  })
+
+  it('sets aria-expanded to true when suggestions open', async () => {
+    window.fetch = () => Promise.resolve({
+      json: () => Promise.resolve([
+        { display_name: 'London, England', address: { city: 'London' }, lat: '51.5', lon: '-0.1' },
+      ]),
+    })
+    const el = await fixture(html`<wc-location-field></wc-location-field>`)
+    el.querySelector('.lf-input').value = 'Lond'
+    el.querySelector('.lf-input').dispatchEvent(new Event('input'))
+    await new Promise(r => setTimeout(r, 400))
+    expect(el.querySelector('.lf-input').getAttribute('aria-expanded')).to.equal('true')
+  })
+
+  it('renders a no-results item when search returns empty', async () => {
+    window.fetch = () => Promise.resolve({ json: () => Promise.resolve([]) })
+    const el = await fixture(html`<wc-location-field></wc-location-field>`)
+    el.querySelector('.lf-input').value = 'xyzzy'
+    el.querySelector('.lf-input').dispatchEvent(new Event('input'))
+    await new Promise(r => setTimeout(r, 400))
+    expect(el.querySelector('.lf-no-results')).to.exist
+  })
+})
+
+// ─── value getter priority ────────────────────────────────────────────────────
+
+describe('value getter', () => {
+  it('returns the W3W address when one is resolved', async () => {
+    const el = await fixture(html`<wc-location-field></wc-location-field>`)
+    el._w3w = '///some.test.words'
+    el._address = 'Some Street, London'
+    expect(el.value).to.equal('///some.test.words')
+  })
+
+  it('falls back to address when W3W is not set', async () => {
+    const el = await fixture(html`<wc-location-field></wc-location-field>`)
+    el._address = 'Some Street, London'
+    expect(el.value).to.equal('Some Street, London')
+  })
+
+  it('falls back to raw input when neither W3W nor address is set', async () => {
+    const el = await fixture(html`<wc-location-field></wc-location-field>`)
+    el.querySelector('.lf-input').value = 'partial input'
+    expect(el.value).to.equal('partial input')
+  })
+})
+
+// ─── Status messages ──────────────────────────────────────────────────────────
+
+describe('status messages', () => {
+  it('_setStatus updates the status element', async () => {
+    const el = await fixture(html`<wc-location-field></wc-location-field>`)
+    el._setStatus('Test message')
+    expect(el.querySelector('.lf-status').textContent).to.equal('Test message')
+  })
+
+  it('_setStatus clears the status element when called with an empty string', async () => {
+    const el = await fixture(html`<wc-location-field></wc-location-field>`)
+    el._setStatus('Test message')
+    el._setStatus('')
+    expect(el.querySelector('.lf-status').textContent).to.equal('')
+  })
+})
+
+// ─── Multiple instances ───────────────────────────────────────────────────────
+
+describe('multiple instances', () => {
+  it('two instances have different suggestion list IDs', async () => {
+    const a = await fixture(html`<wc-location-field></wc-location-field>`)
+    const b = await fixture(html`<wc-location-field></wc-location-field>`)
+    expect(a.querySelector('.lf-suggestions').id).to.not.equal(b.querySelector('.lf-suggestions').id)
+  })
+
+  it('two instances have different input IDs', async () => {
+    const a = await fixture(html`<wc-location-field label="A"></wc-location-field>`)
+    const b = await fixture(html`<wc-location-field label="B"></wc-location-field>`)
+    expect(a.querySelector('.lf-input').id).to.not.equal(b.querySelector('.lf-input').id)
+  })
 })
