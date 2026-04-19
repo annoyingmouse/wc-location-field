@@ -1,0 +1,12 @@
+.claude
+.git
+.gitignore
+.idea
+CLAUDE.md
+index.html
+node_modules
+package-lock.json
+rollup.config.js
+test/
+web-test-runner.config.mjs
+web-test-runner.dist.config.mjs

@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>&lt;wc-location-field&gt;</title>
+
+  <link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura.css" type="text/css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- The component -->
+  <script src="wc-location-field.js" defer></script>
+
+  <style>
+    body {
+      font-family: 'Figtree', sans-serif;
+      margin-bottom: 10rem;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Figtree', sans-serif;
+    }
+  </style>
+</head>
+<body>
+<main>
+  <h1>&lt;wc-location-field&gt;</h1>
+
+  <p>
+    <a href="https://www.webcomponents.org/element/@annoyingmouse/wc-location-field">
+      <img src="https://img.shields.io/badge/webcomponents.org-published-blue.svg" alt="Published on webcomponents.org">
+    </a>
+  </p>
+
+  <p>
+    A self-contained web component for picking a location. Provides address
+    search via <a href="https://nominatim.org/">Nominatim</a> (OpenStreetMap),
+    an optional <a href="https://leafletjs.com/">Leaflet</a> map, browser
+    geolocation, and optional <a href="https://what3words.com/developers">What3Words</a>
+    integration. No framework dependencies.
+  </p>
+
+  <h2>Installation</h2>
+
+  <pre><code>&lt;script src="https://unpkg.com/@annoyingmouse/wc-location-field/wc-location-field.js" defer&gt;&lt;/script&gt;</code></pre>
+
+  <p>That's it — styles and Leaflet (when <code>show-map</code> is used) are loaded automatically.</p>
+
+  <p>Or via CDN as a module:</p>
+
+  <pre><code>&lt;script type="module" src="https://cdn.skypack.dev/@annoyingmouse/wc-location-field/wc-location-field.js"&gt;&lt;/script&gt;</code></pre>
+
+  <h2>Attributes</h2>
+
+  <ul>
+    <li><code>label</code> — field label text (reactive)</li>
+    <li><code>placeholder</code> — input placeholder text (reactive)</li>
+    <li><code>center-lat</code> / <code>center-lng</code> — map centre and Nominatim search bias</li>
+    <li><code>show-map</code> — renders an interactive Leaflet map below the search box</li>
+    <li><code>w3w-key</code> — What3Words API key; enables <code>///word.word.word</code> search</li>
+  </ul>
+
+  <h2>Public API</h2>
+
+  <ul>
+    <li><code>lat</code>, <code>lng</code>, <code>address</code> — read-only state getters</li>
+    <li><code>value</code> — W3W address if resolved, else formatted address, else raw input</li>
+    <li><code>prefill({ address, lat, lng })</code> — programmatically set location without firing an event</li>
+    <li><code>clear()</code> — reset all state</li>
+  </ul>
+
+  <p>
+    The component fires a <code>location-change</code> CustomEvent (bubbles) on every resolved
+    location, with <code>detail: { lat, lng, address, w3w }</code>.
+  </p>
+
+  <h2>Examples</h2>
+
+  <h3>Search only</h3>
+
+  <p>Minimal usage — just a labelled search box, no map.</p>
+
+  <wc-location-field
+    label="From"
+    placeholder="e.g. Paddington Station"
+  ></wc-location-field>
+
+  <pre><code>&lt;wc-location-field
+  label="From"
+  placeholder="e.g. Paddington Station"
+&gt;&lt;/wc-location-field&gt;</code></pre>
+
+  <h3>With map</h3>
+
+  <p>Adds an interactive Leaflet map — tap or drag the marker to set a precise location.</p>
+
+  <wc-location-field
+    label="Meeting point"
+    placeholder="Search or click the map…"
+    show-map
+    center-lat="51.505"
+    center-lng="-0.09"
+  ></wc-location-field>
+
+  <pre><code>&lt;wc-location-field
+  label="Meeting point"
+  show-map
+  center-lat="51.505"
+  center-lng="-0.09"
+&gt;&lt;/wc-location-field&gt;</code></pre>
+
+  <h3>Search bias</h3>
+
+  <p>Setting <code>center-lat</code> and <code>center-lng</code> biases Nominatim results toward that area.</p>
+
+  <wc-location-field
+    label="Destination"
+    placeholder="Search near Cambridge…"
+    show-map
+    center-lat="52.2053"
+    center-lng="0.1218"
+  ></wc-location-field>
+
+  <pre><code>&lt;wc-location-field
+  label="Destination"
+  show-map
+  center-lat="52.2053"
+  center-lng="0.1218"
+&gt;&lt;/wc-location-field&gt;</code></pre>
+
+  <h3>Public API</h3>
+
+  <p>Use <code>prefill()</code>, <code>clear()</code>, and the <code>value</code> / <code>lat</code> / <code>lng</code> getters from JavaScript.</p>
+
+  <wc-location-field
+    id="demo-api"
+    label="Pickup point"
+    placeholder="Search for a location…"
+    show-map
+    center-lat="51.5"
+    center-lng="-0.12"
+  ></wc-location-field>
+
+  <p>
+    <button onclick="prefillDemo()">Prefill — Buckingham Palace</button>
+    <button onclick="clearDemo()">Clear</button>
+    <button onclick="readDemo()">Read value</button>
+  </p>
+
+  <pre><code>const field = document.querySelector('#demo-api');
+
+// Prefill
+field.prefill({ address: 'Buckingham Palace', lat: 51.5014, lng: -0.1419 });
+
+// Clear
+field.clear();
+
+// Read
+console.log(field.value, field.lat, field.lng);</code></pre>
+
+  <h3>location-change event</h3>
+
+  <p>
+    The component fires a <code>location-change</code> event on every resolved location.
+    Set a <code>w3w-key</code> attribute to also enable What3Words search (<code>///word.word.word</code>).
+  </p>
+
+  <wc-location-field
+    id="demo-event"
+    label="Location"
+    placeholder="Type a place or ///three.word.address"
+    show-map
+    center-lat="51.521"
+    center-lng="-0.102"
+  ></wc-location-field>
+
+  <p>Events received:</p>
+  <pre id="event-log">Pick a location above to see events…</pre>
+
+  <pre><code>field.addEventListener('location-change', e => {
+  const { lat, lng, address, w3w } = e.detail;
+});</code></pre>
+
+  <h2>Theming</h2>
+
+  <p>
+    The component uses no Shadow DOM, so CSS custom properties cascade in from any
+    ancestor. Override them on the element or a wrapper:
+  </p>
+
+  <pre><code>wc-location-field {
+  --lf-map-height: 300px;
+  --lf-w3w-color: #e11f26;
+}</code></pre>
+
+  <p>Available custom properties:</p>
+  <ul>
+    <li><code>--lf-map-height</code> — height of the Leaflet map (default: <code>240px</code>)</li>
+    <li><code>--lf-w3w-color</code> — colour of the <code>///</code> What3Words prefix (default: <code>#e11f26</code>)</li>
+  </ul>
+
+  <p>
+    All other visual styling — input borders, button appearance, fonts, colours — is intentionally
+    left unstyled so it inherits from your own stylesheet or design system.
+  </p>
+
+  <h2>Accessibility</h2>
+
+  <p>
+    The search input uses the ARIA combobox pattern (<code>role="combobox"</code>,
+    <code>aria-expanded</code>, <code>aria-haspopup="listbox"</code>,
+    <code>aria-controls</code>). Coordinates are announced via an
+    <code>aria-live="polite"</code> region. The GPS button has an accessible label.
+  </p>
+
+</main>
+
+<script>
+  function prefillDemo() {
+    document.getElementById('demo-api').prefill({
+      address: 'Buckingham Palace, London',
+      lat: 51.5014,
+      lng: -0.1419,
+    });
+  }
+
+  function clearDemo() {
+    document.getElementById('demo-api').clear();
+  }
+
+  function readDemo() {
+    const f = document.getElementById('demo-api');
+    alert(`value: ${f.value}\nlat: ${f.lat}\nlng: ${f.lng}`);
+  }
+
+  const log = document.getElementById('event-log');
+
+  document.getElementById('demo-event').addEventListener('location-change', (e) => {
+    const { lat, lng, address, w3w } = e.detail;
+    const time = new Date().toLocaleTimeString();
+    log.textContent = [
+      `[${time}]`,
+      `lat: ${lat?.toFixed(5)}  lng: ${lng?.toFixed(5)}`,
+      address ? `address: ${address}` : null,
+      w3w     ? `w3w: ${w3w}`         : null,
+    ].filter(Boolean).join('\n');
+  });
+</script>
+</body>
+</html>
