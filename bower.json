@@ -1,5 +1,6 @@
 {
   "name": "wc-location-field",
+  "version": "1.0.1",
   "description": "A web component for location selection with address search, interactive map, geolocation, and What3Words support.",
   "main": "wc-location-field.js",
   "keywords": [

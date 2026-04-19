@@ -29,8 +29,16 @@ class LocationField extends HTMLElement {
     return this.getAttribute("label") || "";
   }
 
+  set label(val) {
+    this.setAttribute("label", val);
+  }
+
   get placeholder() {
     return this.getAttribute("placeholder") || "Search for a location…";
+  }
+
+  set placeholder(val) {
+    this.setAttribute("placeholder", val);
   }
 
   /** Latitude bias for Nominatim search and map centre */
@@ -69,6 +77,8 @@ class LocationField extends HTMLElement {
   // ── Lifecycle ─────────────────────────────────────────────────────────────
 
   connectedCallback() {
+    this._upgradeProperty("label");
+    this._upgradeProperty("placeholder");
     this._render();
     if (this.showMap) {
       _ensureLeaflet().then(() => this._initMap()).catch(() => {});
@@ -435,6 +445,14 @@ class LocationField extends HTMLElement {
 
   // ── Helpers ───────────────────────────────────────────────────────────────
 
+  _upgradeProperty(prop) {
+    if (Object.prototype.hasOwnProperty.call(this, prop)) {
+      const val = this[prop];
+      delete this[prop];
+      this[prop] = val;
+    }
+  }
+
   _formatAddress(result) {
     const a = result.address || {};
     const parts = [
@@ -498,6 +516,10 @@ wc-location-field {
   --lf-map-height: 240px;
   --lf-w3w-color: #e11f26;
   display: block;
+}
+
+wc-location-field[hidden] {
+  display: none;
 }
 
 .lf-label {

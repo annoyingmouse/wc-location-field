@@ -58,6 +58,10 @@ field.clear()
 
 // Read state
 console.log(field.value, field.lat, field.lng, field.address)
+
+// label and placeholder can also be set as JS properties
+field.label = 'Destination'
+field.placeholder = 'Search for a place…'
 ```
 
 ## Events
