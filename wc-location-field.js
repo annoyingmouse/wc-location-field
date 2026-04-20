@@ -224,6 +224,7 @@ class LocationField extends HTMLElement {
       await this._setFromCoords(e.latlng.lat, e.latlng.lng, false);
     });
 
+    new ResizeObserver(() => this._map?.invalidateSize()).observe(el);
     this._map.invalidateSize();
   }
 
