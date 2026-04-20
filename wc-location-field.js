@@ -2,7 +2,7 @@ class LocationField extends HTMLElement {
   static _count = 0;
 
   static get observedAttributes() {
-    return ["label", "placeholder"];
+    return ["label", "placeholder", "center-lat", "center-lng", "radius-km"];
   }
 
   constructor() {
@@ -103,15 +103,20 @@ class LocationField extends HTMLElement {
     }
   }
 
-  attributeChangedCallback(name, _old, val) {
-    if (!this._inputEl) return;
-    if (name === "label") {
-      const el = this.querySelector(".lf-label");
-      if (el) el.textContent = val;
-    } else if (name === "placeholder") {
-      this._inputEl.placeholder = val || "Search for a location…";
+  attributeChangedCallback(name, oldVal, newVal) {
+    if (oldVal === newVal) return;
+    if (name === "label" && this._labelEl) {
+      this._labelEl.textContent = newVal;
+    } else if (name === "placeholder" && this._inputEl) {
+      this._inputEl.placeholder = newVal;
+    } else if (
+      (name === "center-lat" || name === "center-lng" || name === "radius-km") &&
+      this._map
+    ) {
+      this._initMap();
     }
   }
+
 
   // ── Public API ────────────────────────────────────────────────────────────
 
@@ -180,6 +185,7 @@ class LocationField extends HTMLElement {
       ${mapHtml}
     `;
 
+    this._labelEl  = this.querySelector(".lf-label");
     this._inputEl  = this.querySelector(".lf-input");
     this._listEl   = this.querySelector(".lf-suggestions");
     this._coordEl  = this.querySelector(".lf-coords");
