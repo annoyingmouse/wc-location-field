@@ -1,25 +1,37 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>&lt;wc-location-field&gt;</title>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>&lt;wc-location-field&gt;</title>
 
-  <link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura.css" type="text/css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/sakura.css/css/sakura.css"
+      type="text/css"
+    >
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    >
 
-  <!-- The component -->
-  <script src="wc-location-field.js" defer></script>
+    <!-- The component -->
+    <script src="wc-location-field.js" defer></script>
 
-  <style>
+    <style>
     body {
-      font-family: 'Figtree', sans-serif;
+      font-family: "Figtree", sans-serif;
       margin-bottom: 10rem;
     }
-    h1, h2, h3, h4, h5, h6 {
-      font-family: 'Figtree', sans-serif;
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      font-family: "Figtree", sans-serif;
     }
     .lf-field {
       align-items: center;
@@ -32,179 +44,231 @@
       padding-block: 6px;
       aspect-ratio: 1;
     }
-  </style>
-</head>
-<body>
-<main>
-  <h1>&lt;wc-location-field&gt;</h1>
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>&lt;wc-location-field&gt;</h1>
 
-  <p>
-    <a href="https://www.webcomponents.org/element/@annoyingmouse/wc-location-field">
-      <img src="https://img.shields.io/badge/webcomponents.org-published-blue.svg" alt="Published on webcomponents.org">
-    </a>
-  </p>
+      <p>
+        <a
+          href="https://www.webcomponents.org/element/@annoyingmouse/wc-location-field"
+        >
+          <img
+            src="https://img.shields.io/badge/webcomponents.org-published-blue.svg"
+            alt="Published on webcomponents.org"
+          >
+        </a>
+      </p>
 
-  <p>
-    A self-contained web component for picking a location. Provides address
-    search via <a href="https://nominatim.org/">Nominatim</a> (OpenStreetMap),
-    an optional <a href="https://leafletjs.com/">Leaflet</a> map, browser
-    geolocation, and optional <a href="https://what3words.com/developers">What3Words</a>
-    integration. No framework dependencies.
-  </p>
+      <p>
+        A self-contained web component for picking a location. Provides address
+        search via
+        <a href="https://nominatim.org/">Nominatim</a> (OpenStreetMap), an
+        optional <a href="https://leafletjs.com/">Leaflet</a> map, browser
+        geolocation, and optional
+        <a href="https://what3words.com/developers">What3Words</a>
+        integration. No framework dependencies.
+      </p>
 
-  <h2>Installation</h2>
+      <h2>Installation</h2>
 
-  <pre><code>&lt;script src="https://unpkg.com/@annoyingmouse/wc-location-field/wc-location-field.js" defer&gt;&lt;/script&gt;</code></pre>
+      <pre
+      ><code>&lt;script src="https://unpkg.com/@annoyingmouse/wc-location-field/wc-location-field.js" defer&gt;&lt;/script&gt;</code></pre>
 
-  <p>That's it — styles and Leaflet (when <code>show-map</code> is used) are loaded automatically.</p>
+      <p>
+        That's it — styles and Leaflet (when <code>show-map</code> is used) are
+        loaded automatically.
+      </p>
 
-  <p>Or via CDN as a module:</p>
+      <p>Or via CDN as a module:</p>
 
-  <pre><code>&lt;script type="module" src="https://cdn.skypack.dev/@annoyingmouse/wc-location-field/wc-location-field.js"&gt;&lt;/script&gt;</code></pre>
+      <pre
+      ><code>&lt;script type="module" src="https://cdn.skypack.dev/@annoyingmouse/wc-location-field/wc-location-field.js"&gt;&lt;/script&gt;</code></pre>
 
-  <h2>Attributes</h2>
+      <h2>Attributes</h2>
 
-  <ul>
-    <li><code>label</code> — field label text (reactive)</li>
-    <li><code>placeholder</code> — input placeholder text (reactive)</li>
-    <li><code>center-lat</code> / <code>center-lng</code> — map centre and Nominatim search bias</li>
-    <li><code>radius-km</code> — draws a circle overlay on the map (requires <code>center-lat</code> / <code>center-lng</code>)</li>
-    <li><code>show-map</code> — renders an interactive Leaflet map below the search box</li>
-    <li><code>w3w-key</code> — What3Words API key; enables <code>///word.word.word</code> search</li>
-  </ul>
+      <ul>
+        <li><code>label</code> — field label text (reactive)</li>
+        <li><code>placeholder</code> — input placeholder text (reactive)</li>
+        <li>
+          <code>center-lat</code>
+          / <code>center-lng</code> — map centre and Nominatim search bias
+        </li>
+        <li>
+          <code>radius-km</code>
+          — draws a circle overlay on the map (requires
+          <code>center-lat</code> / <code>center-lng</code>)
+        </li>
+        <li>
+          <code>show-map</code>
+          — renders an interactive Leaflet map below the search box
+        </li>
+        <li>
+          <code>w3w-key</code>
+          — What3Words API key; enables <code>///word.word.word</code> search
+        </li>
+      </ul>
 
-  <h2>Public API</h2>
+      <h2>Public API</h2>
 
-  <ul>
-    <li><code>lat</code>, <code>lng</code>, <code>address</code> — read-only state getters</li>
-    <li><code>value</code> — W3W address if resolved, else formatted address, else raw input</li>
-    <li><code>geojson</code> — set a GeoJSON object (or JSON string) to draw a polygon overlay; map centres on its bounds</li>
-    <li><code>prefill({ address, lat, lng })</code> — programmatically set location without firing an event</li>
-    <li><code>clear()</code> — reset all state</li>
-  </ul>
+      <ul>
+        <li>
+          <code>lat</code>, <code>lng</code>, <code>address</code> — read-only
+          state getters
+        </li>
+        <li>
+          <code>value</code>
+          — W3W address if resolved, else formatted address, else raw input
+        </li>
+        <li>
+          <code>geojson</code>
+          — set a GeoJSON object (or JSON string) to draw a polygon overlay; map
+          centres on its bounds
+        </li>
+        <li>
+          <code>prefill( { address, lat, lng })</code>
+          — programmatically set location without firing an event
+        </li>
+        <li><code>clear()</code> — reset all state</li>
+      </ul>
 
-  <p>
-    The component fires a <code>location-change</code> CustomEvent (bubbles) on every resolved
-    location, with <code>detail: { lat, lng, address, w3w }</code>.
-  </p>
+      <p>
+        The component fires a <code>location-change</code> CustomEvent (bubbles)
+        on every resolved location, with
+        <code>detail: { lat, lng, address, w3w }</code>.
+      </p>
 
-  <h2>Examples</h2>
+      <h2>Examples</h2>
 
-  <h3>Search only</h3>
+      <h3>Search only</h3>
 
-  <p>Minimal usage — just a labelled search box, no map.</p>
+      <p>Minimal usage — just a labelled search box, no map.</p>
 
-  <wc-location-field
-    label="From"
-    placeholder="e.g. Paddington Station"
-  ></wc-location-field>
+      <wc-location-field
+        label="From"
+        placeholder="e.g. Paddington Station"
+      ></wc-location-field>
 
-  <pre><code>&lt;wc-location-field
+      <pre><code>&lt;wc-location-field
   label="From"
   placeholder="e.g. Paddington Station"
 &gt;&lt;/wc-location-field&gt;</code></pre>
 
-  <h3>With map</h3>
+      <h3>With map</h3>
 
-  <p>Adds an interactive Leaflet map — tap or drag the marker to set a precise location.</p>
+      <p>
+        Adds an interactive Leaflet map — tap or drag the marker to set a
+        precise location.
+      </p>
 
-  <wc-location-field
-    label="Meeting point"
-    placeholder="Search or click the map…"
-    show-map
-    center-lat="51.505"
-    center-lng="-0.09"
-  ></wc-location-field>
+      <wc-location-field
+        label="Meeting point"
+        placeholder="Search or click the map…"
+        show-map
+        center-lat="51.505"
+        center-lng="-0.09"
+      ></wc-location-field>
 
-  <pre><code>&lt;wc-location-field
+      <pre><code>&lt;wc-location-field
   label="Meeting point"
   show-map
   center-lat="51.505"
   center-lng="-0.09"
 &gt;&lt;/wc-location-field&gt;</code></pre>
 
-  <h3>Search bias</h3>
+      <h3>Search bias</h3>
 
-  <p>Setting <code>center-lat</code> and <code>center-lng</code> biases Nominatim results toward that area.</p>
+      <p>
+        Setting <code>center-lat</code> and <code>center-lng</code> biases
+        Nominatim results toward that area.
+      </p>
 
-  <wc-location-field
-    label="Destination"
-    placeholder="Search near Cambridge…"
-    show-map
-    center-lat="52.2053"
-    center-lng="0.1218"
-  ></wc-location-field>
+      <wc-location-field
+        label="Destination"
+        placeholder="Search near Cambridge…"
+        show-map
+        center-lat="52.2053"
+        center-lng="0.1218"
+      ></wc-location-field>
 
-  <pre><code>&lt;wc-location-field
+      <pre><code>&lt;wc-location-field
   label="Destination"
   show-map
   center-lat="52.2053"
   center-lng="0.1218"
 &gt;&lt;/wc-location-field&gt;</code></pre>
 
-  <h3>GeoJSON boundary</h3>
+      <h3>GeoJSON boundary</h3>
 
-  <p>
-    Set the <code>geojson</code> JS property to draw an area overlay on the map.
-    The map centres and fits to the boundary automatically.
-  </p>
+      <p>
+        Set the <code>geojson</code> JS property to draw an area overlay on the
+        map. The map centres and fits to the boundary automatically.
+      </p>
 
-  <wc-location-field
-    id="demo-geojson"
-    label="Location in Witchford"
-    placeholder="Search within Witchford…"
-    show-map
-  ></wc-location-field>
+      <wc-location-field
+        id="demo-geojson"
+        label="Location in Witchford"
+        placeholder="Search within Witchford…"
+        show-map
+      ></wc-location-field>
 
-  <pre><code>const field = document.querySelector('#demo-geojson');
+      <pre><code>const field = document.querySelector('#demo-geojson');
 field.geojson = {
   type: 'Polygon',
   coordinates: [ /* Witchford boundary */ ]
 };</code></pre>
 
-  <h3>Radius boundary</h3>
+      <h3>Radius boundary</h3>
 
-  <p>
-    Supply <code>center-lat</code>, <code>center-lng</code>, and <code>radius-km</code>
-    to draw a circle overlay instead.
-  </p>
+      <p>
+        Supply <code>center-lat</code>, <code>center-lng</code>, and
+        <code>radius-km</code>
+        to draw a circle overlay instead.
+      </p>
 
-  <wc-location-field
-    label="Location near Cambridge"
-    placeholder="Search within 5 km of Cambridge…"
-    show-map
-    center-lat="52.2053"
-    center-lng="0.1218"
-    radius-km="2.5"
-  ></wc-location-field>
+      <wc-location-field
+        label="Location near Cambridge"
+        placeholder="Search within 5 km of Cambridge…"
+        show-map
+        center-lat="52.2053"
+        center-lng="0.1218"
+        radius-km="2.5"
+      ></wc-location-field>
 
-  <pre><code>&lt;wc-location-field
+      <pre><code>&lt;wc-location-field
   show-map
   center-lat="52.2053"
   center-lng="0.1218"
   radius-km="2.5"
 &gt;&lt;/wc-location-field&gt;</code></pre>
 
-  <h3>Public API</h3>
+      <h3>Public API</h3>
 
-  <p>Use <code>prefill()</code>, <code>clear()</code>, and the <code>value</code> / <code>lat</code> / <code>lng</code> getters from JavaScript.</p>
+      <p>
+        Use <code>prefill()</code>, <code>clear()</code>, and the
+        <code>value</code> / <code>lat</code> / <code>lng</code> getters from
+        JavaScript.
+      </p>
 
-  <wc-location-field
-    id="demo-api"
-    label="Pickup point"
-    placeholder="Search for a location…"
-    show-map
-    center-lat="51.5"
-    center-lng="-0.12"
-  ></wc-location-field>
+      <wc-location-field
+        id="demo-api"
+        label="Pickup point"
+        placeholder="Search for a location…"
+        show-map
+        center-lat="51.5"
+        center-lng="-0.12"
+      ></wc-location-field>
 
-  <p>
-    <button onclick="prefillDemo()">Prefill — Buckingham Palace</button>
-    <button onclick="clearDemo()">Clear</button>
-    <button onclick="readDemo()">Read value</button>
-  </p>
+      <p>
+        <button type="button" onclick="prefillDemo()">
+          Prefill — Buckingham Palace
+        </button>
+        <button type="button" onclick="clearDemo()">Clear</button>
+        <button type="button" onclick="readDemo()">Read value</button>
+      </p>
 
-  <pre><code>const field = document.querySelector('#demo-api');
+      <pre><code>const field = document.querySelector('#demo-api');
 
 // Prefill
 field.prefill({ address: 'Buckingham Palace', lat: 51.5014, lng: -0.1419 });
@@ -215,99 +279,1040 @@ field.clear();
 // Read
 console.log(field.value, field.lat, field.lng);</code></pre>
 
-  <h3>location-change event</h3>
+      <h3>location-change event</h3>
 
-  <p>
-    The component fires a <code>location-change</code> event on every resolved location.
-    Set a <code>w3w-key</code> attribute to also enable What3Words search (<code>///word.word.word</code>).
-  </p>
+      <p>
+        The component fires a <code>location-change</code> event on every
+        resolved location. Set a <code>w3w-key</code> attribute to also enable
+        What3Words search (<code>///word.word.word</code>).
+      </p>
 
-  <wc-location-field
-    id="demo-event"
-    label="Location"
-    placeholder="Type a place or ///three.word.address"
-    show-map
-    center-lat="51.521"
-    center-lng="-0.102"
-  ></wc-location-field>
+      <wc-location-field
+        id="demo-event"
+        label="Location"
+        placeholder="Type a place or ///three.word.address"
+        show-map
+        center-lat="51.521"
+        center-lng="-0.102"
+      ></wc-location-field>
 
-  <p>Events received:</p>
-  <pre id="event-log">Pick a location above to see events…</pre>
+      <p>Events received:</p>
+      <pre id="event-log">Pick a location above to see events…</pre>
 
-  <pre><code>field.addEventListener('location-change', e => {
+      <pre><code>field.addEventListener('location-change', e => {
   const { lat, lng, address, w3w } = e.detail;
 });</code></pre>
 
-  <h2>Theming</h2>
+      <h2>Theming</h2>
 
-  <p>
-    The component uses no Shadow DOM, so CSS custom properties cascade in from any
-    ancestor. Override them on the element or a wrapper:
-  </p>
+      <p>
+        The component uses no Shadow DOM, so CSS custom properties cascade in
+        from any ancestor. Override them on the element or a wrapper:
+      </p>
 
-  <pre><code>wc-location-field {
+      <pre><code>wc-location-field {
   --lf-map-height: 300px;
   --lf-w3w-color: #e11f26;
 }</code></pre>
 
-  <p>Available custom properties:</p>
-  <ul>
-    <li><code>--lf-map-height</code> — height of the Leaflet map (default: <code>240px</code>)</li>
-    <li><code>--lf-w3w-color</code> — colour of the <code>///</code> What3Words prefix (default: <code>#e11f26</code>)</li>
-  </ul>
+      <p>Available custom properties:</p>
+      <ul>
+        <li>
+          <code>--lf-map-height</code>
+          — height of the Leaflet map (default: <code>240px</code>)
+        </li>
+        <li>
+          <code>--lf-w3w-color</code>
+          — colour of the <code>///</code> What3Words prefix (default:
+          <code>#e11f26</code>)
+        </li>
+      </ul>
 
-  <p>
-    All other visual styling — input borders, button appearance, fonts, colours — is intentionally
-    left unstyled so it inherits from your own stylesheet or design system.
-  </p>
+      <p>
+        All other visual styling — input borders, button appearance, fonts,
+        colours — is intentionally left unstyled so it inherits from your own
+        stylesheet or design system.
+      </p>
 
-  <h2>Accessibility</h2>
+      <h2>Accessibility</h2>
 
-  <p>
-    The search input uses the ARIA combobox pattern (<code>role="combobox"</code>,
-    <code>aria-expanded</code>, <code>aria-haspopup="listbox"</code>,
-    <code>aria-controls</code>). Coordinates are announced via an
-    <code>aria-live="polite"</code> region. The GPS button has an accessible label.
-  </p>
+      <p>
+        The search input uses the ARIA combobox pattern (<code
+          >role="combobox"</code
+        >,
+        <code>aria-expanded</code>, <code>aria-haspopup="listbox"</code>,
+        <code>aria-controls</code>). Coordinates are announced via an
+        <code>aria-live="polite"</code>
+        region. The GPS button has an accessible label.
+      </p>
+    </main>
 
-</main>
+    <script>
+    const WITCHFORD_BOUNDARY = {
+      type: "Polygon",
+      coordinates: [
+        [
+          [0.237773024749553, 52.405954629273332],
+          [0.238672149112982, 52.405677401239146],
+          [0.239028447285551, 52.405658967103768],
+          [0.239537873551783, 52.405561702193225],
+          [0.23997083647404, 52.405508295309978],
+          [0.240958193561699, 52.405418207930097],
+          [0.24154834958241, 52.405351674871405],
+          [0.241620982643345, 52.405358196928034],
+          [0.241582278707876, 52.405344688568462],
+          [0.241533399207221, 52.405337522732324],
+          [0.241521557914104, 52.405335948889437],
+          [0.241471346282182, 52.405331505866648],
+          [0.241421271282498, 52.405329757809902],
+          [0.241399239646166, 52.405330175566689],
+          [0.241274029392406, 52.405325356143962],
+          [0.241231811855915, 52.405313298148641],
+          [0.241191224816254, 52.405298601566081],
+          [0.24117830192054, 52.405293091748661],
+          [0.240956125977205, 52.405153253288894],
+          [0.240864055524608, 52.405091605641459],
+          [0.240697365167246, 52.40497031725473],
+          [0.240667033838848, 52.404952009162066],
+          [0.240627562176688, 52.404927400133175],
+          [0.240606448646914, 52.404916920113244],
+          [0.24060346559668, 52.404916077464485],
+          [0.240578082360014, 52.404908375949205],
+          [0.240552987129458, 52.40490345646618],
+          [0.240524742566937, 52.404900215217815],
+          [0.240499728079835, 52.40489979015539],
+          [0.24026796818648, 52.404921806900795],
+          [0.240050882044687, 52.404943275359052],
+          [0.24002302558234, 52.404944792355366],
+          [0.240001296968616, 52.404945383950256],
+          [0.23997303752236, 52.404944750509777],
+          [0.239950442543291, 52.404942750855035],
+          [0.239898109438928, 52.404931243754241],
+          [0.23984698491582, 52.404905866169337],
+          [0.239832843023456, 52.404896602699566],
+          [0.239775171268543, 52.404855163684552],
+          [0.239718089636557, 52.404807958631274],
+          [0.239661596888275, 52.404757864979317],
+          [0.239606158435379, 52.404711168256931],
+          [0.239554197593106, 52.404657661681313],
+          [0.239533525584883, 52.40463557353084],
+          [0.239498114525604, 52.404595331180509],
+          [0.239467718034259, 52.404549598664012],
+          [0.239451404870824, 52.404520683978511],
+          [0.239423269307621, 52.404458633239358],
+          [0.239400035848774, 52.404385969075754],
+          [0.239385934142797, 52.404328148417605],
+          [0.239373115386964, 52.404275338928812],
+          [0.239365528965988, 52.404232950862024],
+          [0.239362198068266, 52.404199114419988],
+          [0.239359009500511, 52.404165185362181],
+          [0.239360176535365, 52.404141784256346],
+          [0.239363076196255, 52.404123565640923],
+          [0.239369522864557, 52.404097007259857],
+          [0.239380253602979, 52.404076662062344],
+          [0.239398750434738, 52.404055810057791],
+          [0.239428015794423, 52.404032775814294],
+          [0.239458358014064, 52.404013587687849],
+          [0.239495795632301, 52.403995164316733],
+          [0.239531689145093, 52.403981086311049],
+          [0.239681572215498, 52.403939041712285],
+          [0.239733353972495, 52.403928079530544],
+          [0.239778912424831, 52.403916156216376],
+          [0.239817205811147, 52.403903021759284],
+          [0.239853346137455, 52.403890917199334],
+          [0.2398849242795, 52.403878719239628],
+          [0.239920914388909, 52.403863650169974],
+          [0.239935243406523, 52.403853397604777],
+          [0.239942568028598, 52.403844176961933],
+          [0.23994763949482, 52.403834009903825],
+          [0.239952539266627, 52.403817551752155],
+          [0.239954111022219, 52.403802145777398],
+          [0.239951143798281, 52.403775495991205],
+          [0.239944257771684, 52.403746942242208],
+          [0.239888042703269, 52.403609441943566],
+          [0.239817402502105, 52.403419342447023],
+          [0.239797955331885, 52.403357576750899],
+          [0.239787023914401, 52.40328108277297],
+          [0.239780048949025, 52.403204333986103],
+          [0.239773852940131, 52.40306750438279],
+          [0.239777417870687, 52.402923116442331],
+          [0.239777492572782, 52.402878155403151],
+          [0.239774067195247, 52.402839555033005],
+          [0.23976934353119, 52.40281015102677],
+          [0.239750922284389, 52.402754120714626],
+          [0.239725428613791, 52.402697774814413],
+          [0.239716063850846, 52.402681227280411],
+          [0.239702835491772, 52.402652254178278],
+          [0.239691096830348, 52.402638179443123],
+          [0.239682096108598, 52.402628818548635],
+          [0.239669836973364, 52.402618979878099],
+          [0.239655205190603, 52.402608736566478],
+          [0.239632032270435, 52.40259820549096],
+          [0.239587661469086, 52.402584209525699],
+          [0.239529071723184, 52.402571022462574],
+          [0.239334053201561, 52.402543245525514],
+          [0.23910106611847, 52.402523381056575],
+          [0.238781892137425, 52.40249112117754],
+          [0.238629919733147, 52.402474397107767],
+          [0.238477480883716, 52.402454264747526],
+          [0.23819435828813, 52.402413947179141],
+          [0.237971569021366, 52.402377701943244],
+          [0.237840968673063, 52.402356256095864],
+          [0.237710574414072, 52.402335975153846],
+          [0.237704654224305, 52.402335188039103],
+          [0.237580182019406, 52.402321538781408],
+          [0.237454418487381, 52.402311420685578],
+          [0.23730075006535, 52.402301830641171],
+          [0.237203463996048, 52.402293780913617],
+          [0.237104171800958, 52.402286758185753],
+          [0.236875746228184, 52.402281459852787],
+          [0.236734424205818, 52.402280537423877],
+          [0.236591733470604, 52.402281618946027],
+          [0.236321570363218, 52.402294014088326],
+          [0.236162860351151, 52.402298095743035],
+          [0.236002590765158, 52.402300408303553],
+          [0.235859601643835, 52.402301404665096],
+          [0.235718234120672, 52.402299582688713],
+          [0.235597497816752, 52.402295841711918],
+          [0.235477827472929, 52.402289922393159],
+          [0.235387736716333, 52.402284612505547],
+          [0.235297642980778, 52.402276335275054],
+          [0.23527382462286, 52.40227336877382],
+          [0.235187763047034, 52.402260519253332],
+          [0.23510318991992, 52.402245123790287],
+          [0.235073306144289, 52.402238495339141],
+          [0.234986795151153, 52.402216752180578],
+          [0.234903236790538, 52.40219234547861],
+          [0.23482354406341, 52.4021658874113],
+          [0.234745192979244, 52.402136886191251],
+          [0.234667044927984, 52.402106082700243],
+          [0.234592913937523, 52.402073314915413],
+          [0.234585388957118, 52.40206986041138],
+          [0.234547677814676, 52.402050881051792],
+          [0.234509765358805, 52.402030826457185],
+          [0.234453953772453, 52.401994025587669],
+          [0.234404165437002, 52.401954233421833],
+          [0.2343581746424, 52.401911042444553],
+          [0.234318747557912, 52.401866828187337],
+          [0.234283534297508, 52.401821635075244],
+          [0.234275917276403, 52.401810539169581],
+          [0.23423262601526, 52.401733487541414],
+          [0.234198028868308, 52.401653933668108],
+          [0.234172930824381, 52.401584900608931],
+          [0.234152055658736, 52.401515068373584],
+          [0.234140310227231, 52.401451357906559],
+          [0.234131461290365, 52.401386783418808],
+          [0.234125930912519, 52.401207499362805],
+          [0.234119883823736, 52.401081996687651],
+          [0.234095042436132, 52.400884194617817],
+          [0.234085292111797, 52.400798865850156],
+          [0.23407405958049, 52.400713295339287],
+          [0.234064527477822, 52.40066428975998],
+          [0.234055302400732, 52.400624270286578],
+          [0.23404466317622, 52.400585356570375],
+          [0.234031086716518, 52.400546498369401],
+          [0.234022660140827, 52.400531011715167],
+          [0.233980847599218, 52.400471556200721],
+          [0.233930111260189, 52.400415866133244],
+          [0.233912456773966, 52.400398126113977],
+          [0.23369303612437, 52.400201304328604],
+          [0.233629042154038, 52.400145055539156],
+          [0.233562992289875, 52.400088845568241],
+          [0.233505478224848, 52.400041556068331],
+          [0.233444668150927, 52.399995947363074],
+          [0.233353400015871, 52.399932300950368],
+          [0.233295961827105, 52.399889415944877],
+          [0.233237154953816, 52.399848534987946],
+          [0.233235640981267, 52.399847664405272],
+          [0.233196966651301, 52.399824117044211],
+          [0.233157171918737, 52.399801669865617],
+          [0.233038969107663, 52.39975480742325],
+          [0.232884412753592, 52.399695413579046],
+          [0.232752148860597, 52.399640813721234],
+          [0.232736062927548, 52.399633744247261],
+          [0.232328895139964, 52.399427428322063],
+          [0.232222423028294, 52.399382861268627],
+          [0.23216373425419, 52.399361759710168],
+          [0.232107160507457, 52.399341787125458],
+          [0.232018186169893, 52.399314783284829],
+          [0.231990173167, 52.399307309515955],
+          [0.231950117751015, 52.399300063146519],
+          [0.231921987876757, 52.399296098400832],
+          [0.231891352340052, 52.399292001125957],
+          [0.231834692844422, 52.39928488841759],
+          [0.231817778660562, 52.399281790889255],
+          [0.231759478322238, 52.399271292215715],
+          [0.231685435967475, 52.39925470651562],
+          [0.231635357017993, 52.399241085321037],
+          [0.231469398263589, 52.399191616622197],
+          [0.231379986713308, 52.399167588106202],
+          [0.231268652558449, 52.399143164164727],
+          [0.231306532022049, 52.399078157065809],
+          [0.231311786277951, 52.399071583710693],
+          [0.231318978695502, 52.399062635873427],
+          [0.23132173454901, 52.399058987090122],
+          [0.231325958983402, 52.399055310578561],
+          [0.231335921758844, 52.399048828158428],
+          [0.231345929859241, 52.39904324406924],
+          [0.231354424048362, 52.399036789376062],
+          [0.231365583426454, 52.399024889234575],
+          [0.231373940705472, 52.399009894842884],
+          [0.231375984925643, 52.399006709088653],
+          [0.231377904951797, 52.399003975273132],
+          [0.231380326285361, 52.39899952353575],
+          [0.23138221546805, 52.398987438751561],
+          [0.231379950946459, 52.398983345246016],
+          [0.231379177668273, 52.398979673177472],
+          [0.231332878372304, 52.398904026499778],
+          [0.231309450021246, 52.398853394992834],
+          [0.231289251679486, 52.398811424616213],
+          [0.231276826829622, 52.398792416590069],
+          [0.231259463246618, 52.398760013993822],
+          [0.231257910371504, 52.398755457455906],
+          [0.231234435047652, 52.398706805033243],
+          [0.231214032887121, 52.398660792147261],
+          [0.231203046773233, 52.398638250118083],
+          [0.231182776081001, 52.398609409228065],
+          [0.231066880602722, 52.39847123406313],
+          [0.230900471812753, 52.398255423355451],
+          [0.230834243590521, 52.398172239834075],
+          [0.230585860351711, 52.397858256162998],
+          [0.230468120425903, 52.397718406767062],
+          [0.230453805271601, 52.397699794006144],
+          [0.230446149964082, 52.39769373409468],
+          [0.230327570254773, 52.397569276517991],
+          [0.230171672469396, 52.397410184992914],
+          [0.230000079280245, 52.397240059668853],
+          [0.229845928666152, 52.397086419791236],
+          [0.229743535908843, 52.39698557459716],
+          [0.229738083594765, 52.396979473074509],
+          [0.229316186465235, 52.396596825397168],
+          [0.229064396932527, 52.396381094089257],
+          [0.228518761226132, 52.395925785214153],
+          [0.228400664036157, 52.395828202324772],
+          [0.228267481829496, 52.395720023579855],
+          [0.228202313418396, 52.395669369199737],
+          [0.22812819808615, 52.395610341187052],
+          [0.228089483362932, 52.395594615978254],
+          [0.228085244930345, 52.395592178163142],
+          [0.228080584059725, 52.395590107987516],
+          [0.228075855305686, 52.395586690309919],
+          [0.228071314129549, 52.395584078364593],
+          [0.228069301030963, 52.395582048187023],
+          [0.228058076371468, 52.395569311508531],
+          [0.228054233228294, 52.395565967051908],
+          [0.228039021084821, 52.395552855955877],
+          [0.228024857473976, 52.395543052084363],
+          [0.22801537283262, 52.395535677723416],
+          [0.227992258139003, 52.395523255122264],
+          [0.227980087503272, 52.395517999529488],
+          [0.227970054181067, 52.395514322179025],
+          [0.227966728520563, 52.395512496582782],
+          [0.227955107038868, 52.395509388684999],
+          [0.227934408214846, 52.395506991429983],
+          [0.227931118758606, 52.395505884500416],
+          [0.227927994250335, 52.395505134136194],
+          [0.227925439027879, 52.395504013364331],
+          [0.227921173461401, 52.395501036542228],
+          [0.227913170888661, 52.395493903988864],
+          [0.227910333063404, 52.39549009098107],
+          [0.227909646121577, 52.395488125718437],
+          [0.227909501314015, 52.395485251047504],
+          [0.22790752194324, 52.395480972261907],
+          [0.227905697576915, 52.395465180950517],
+          [0.227836403808799, 52.395402644944504],
+          [0.227794109464454, 52.395368373934339],
+          [0.227732160002583, 52.395329078299447],
+          [0.227702373655879, 52.395309677824478],
+          [0.227520987820297, 52.39518990818901],
+          [0.227117505839316, 52.394932881794922],
+          [0.226885062822079, 52.394788626369632],
+          [0.226772151309361, 52.39471216497504],
+          [0.226767711916141, 52.394708651874218],
+          [0.226497539369389, 52.394518528684202],
+          [0.226443042952691, 52.394481250008781],
+          [0.226435382097314, 52.394477977425367],
+          [0.226353870894867, 52.394435452860691],
+          [0.226323747083281, 52.394421003930468],
+          [0.226310311765065, 52.394413973616381],
+          [0.226218854011687, 52.394375323010365],
+          [0.226139650052004, 52.394340667687104],
+          [0.226113904534915, 52.394325596715078],
+          [0.226064487637521, 52.394301620079915],
+          [0.226007014878987, 52.394281122162035],
+          [0.225987434860632, 52.394274657148685],
+          [0.225962344805944, 52.394266767299669],
+          [0.225961034616018, 52.394269939135555],
+          [0.225953681081168, 52.394266930488747],
+          [0.225906516884141, 52.394249745183409],
+          [0.225765684211765, 52.394199615426288],
+          [0.225729827187357, 52.3941880618083],
+          [0.225666849373855, 52.394172073427697],
+          [0.225601707459526, 52.394159812439796],
+          [0.225534484989139, 52.394150018404758],
+          [0.225518241916373, 52.394148525922937],
+          [0.225429153405318, 52.394133568647305],
+          [0.22529528014591, 52.39411073250227],
+          [0.225163248257418, 52.394092357473099],
+          [0.224996640759426, 52.394073284501928],
+          [0.224885370311702, 52.394052719893772],
+          [0.224673763963486, 52.394077025224036],
+          [0.224608012455019, 52.394029257250502],
+          [0.224309852692555, 52.393676902951654],
+          [0.22396349000115, 52.393260263932909],
+          [0.223455278243516, 52.392641204761759],
+          [0.223016656280398, 52.392078831978914],
+          [0.222805732801067, 52.391807472804551],
+          [0.222004982629404, 52.390902455292149],
+          [0.222060145714419, 52.390879616359761],
+          [0.223620520729347, 52.390233486059529],
+          [0.225080224715356, 52.389629315257714],
+          [0.226395019041831, 52.389113504001607],
+          [0.226754945508984, 52.388971588720338],
+          [0.227027851057959, 52.388831312322182],
+          [0.22711529756021, 52.388776372100502],
+          [0.227196572217946, 52.388660643400407],
+          [0.227219755674014, 52.388565042640984],
+          [0.227193405717349, 52.388474180813326],
+          [0.227192589082885, 52.388396161927822],
+          [0.227246657479647, 52.388296171897508],
+          [0.227141569241412, 52.388309572205799],
+          [0.22693693461109, 52.388322944828715],
+          [0.226603829606719, 52.388317802018804],
+          [0.226147897038818, 52.388282616698447],
+          [0.22595378018867, 52.388257724137731],
+          [0.225596912077101, 52.388213057185013],
+          [0.225283745370876, 52.388171372489694],
+          [0.224792727994055, 52.388087991531016],
+          [0.224430915049838, 52.388006775843422],
+          [0.224423582336457, 52.387772178094203],
+          [0.22439596166471, 52.386972357514146],
+          [0.22438468008036, 52.386975375341748],
+          [0.224026773208483, 52.386895160371779],
+          [0.223553786774458, 52.38673573324477],
+          [0.223402917997523, 52.386467826401542],
+          [0.223648916606969, 52.386172400107185],
+          [0.223828977912015, 52.386003650937553],
+          [0.224001186627336, 52.385962284429048],
+          [0.224121270058103, 52.385986100806434],
+          [0.224243194401583, 52.386014378353998],
+          [0.224290627065366, 52.386022477427318],
+          [0.224318838204707, 52.386028240727413],
+          [0.224364983400407, 52.386039960758957],
+          [0.224448510079807, 52.386064464927323],
+          [0.224699801698499, 52.386140427460973],
+          [0.224716630944963, 52.386103954257933],
+          [0.224691701707497, 52.385762785908895],
+          [0.224730977381585, 52.385763853854016],
+          [0.224707732693765, 52.385100222735169],
+          [0.224678136167595, 52.385100797916614],
+          [0.224673284082073, 52.384977412683803],
+          [0.224672177665458, 52.384949270926029],
+          [0.224599473628926, 52.384940065193746],
+          [0.224586738886953, 52.384946320505129],
+          [0.224276991417438, 52.384914088621848],
+          [0.224280711769898, 52.384903030509399],
+          [0.224242628336516, 52.384899062575009],
+          [0.223249722105978, 52.38478787775761],
+          [0.22307520896686, 52.384768681256098],
+          [0.222499605573606, 52.384622150600748],
+          [0.222271310444728, 52.384582195083937],
+          [0.222252178399554, 52.38454476199405],
+          [0.222207550910463, 52.384314231089483],
+          [0.222126740313222, 52.383963053097922],
+          [0.222069456746268, 52.383693501443858],
+          [0.221317642288312, 52.383529201308257],
+          [0.22019222028961, 52.383285171783946],
+          [0.220192707843607, 52.383270874500738],
+          [0.220113544671265, 52.38325410829605],
+          [0.220115935867217, 52.383175833875747],
+          [0.220121579686335, 52.38298959559004],
+          [0.220027379731058, 52.382971852978557],
+          [0.219603316407334, 52.382954641927512],
+          [0.219567249788213, 52.382953341171067],
+          [0.219566157653171, 52.382963792283533],
+          [0.219496284837229, 52.382982818746775],
+          [0.21949564047917, 52.383001318185784],
+          [0.219438703009753, 52.382999923838966],
+          [0.219418561531458, 52.38299942992748],
+          [0.219418374846059, 52.383005961549486],
+          [0.219418007071609, 52.383019429323639],
+          [0.21937480869944, 52.38301890987389],
+          [0.218835620907422, 52.382994506681776],
+          [0.218797785203673, 52.382992798305892],
+          [0.218792973648019, 52.383020215016657],
+          [0.218527185496162, 52.383267087303807],
+          [0.218381097942416, 52.38339850392218],
+          [0.218225935866988, 52.383431000046919],
+          [0.218222759396961, 52.383433472200068],
+          [0.218045513160375, 52.38305520501175],
+          [0.217990398769895, 52.382777480076406],
+          [0.217946776556936, 52.382141675556802],
+          [0.218460083415984, 52.381771478256105],
+          [0.219093444672347, 52.381420598347134],
+          [0.220431712912647, 52.380711191051709],
+          [0.2221817081385, 52.379714366774031],
+          [0.223286614930157, 52.379071341525574],
+          [0.224374492138059, 52.378381790891297],
+          [0.225525408936662, 52.377775722048277],
+          [0.225507148963922, 52.377752672612544],
+          [0.224571581493329, 52.376571672805213],
+          [0.223122817232732, 52.374843682115518],
+          [0.221276057414076, 52.372677199148029],
+          [0.220849865457037, 52.372236553653281],
+          [0.220360047075884, 52.371676136126624],
+          [0.219545115419706, 52.37204355614697],
+          [0.218359132688314, 52.372570096667921],
+          [0.218314021706117, 52.372600682526524],
+          [0.218268672414607, 52.37262651433025],
+          [0.217905613337109, 52.372789162256595],
+          [0.217053538687435, 52.373160829944261],
+          [0.215572484321964, 52.373819075932474],
+          [0.214157443246329, 52.374437999399142],
+          [0.213119407295725, 52.374901151475243],
+          [0.212474689279069, 52.375184444746743],
+          [0.21192503180127, 52.375437167340991],
+          [0.211461459777196, 52.375658537347654],
+          [0.21114606861703, 52.375811469199029],
+          [0.21079439512593, 52.376078562094889],
+          [0.210171610613104, 52.376544861322024],
+          [0.20976881212625, 52.376839315618327],
+          [0.209643053660838, 52.376936593969489],
+          [0.209607585362987, 52.376973657316491],
+          [0.209543507030765, 52.377068355039107],
+          [0.209486614232606, 52.377166843310533],
+          [0.209457052077709, 52.377228776513547],
+          [0.209444248163346, 52.377346068680232],
+          [0.209428724396432, 52.377549058486814],
+          [0.209430239489364, 52.37762611306939],
+          [0.209442194944212, 52.377678706028099],
+          [0.209522498697615, 52.377885613714547],
+          [0.209664588252563, 52.378255525286121],
+          [0.209786311032894, 52.378544450954571],
+          [0.209836212351064, 52.378656287566407],
+          [0.209920164470562, 52.378796036523269],
+          [0.210212034346749, 52.379315883872692],
+          [0.210444400396852, 52.379718365780882],
+          [0.210691964283099, 52.380144828395494],
+          [0.210985186044816, 52.380644664151369],
+          [0.211057350175158, 52.380781777083399],
+          [0.21108733110051, 52.380868291642471],
+          [0.211141943120317, 52.381074252008084],
+          [0.211148619790886, 52.38116120264651],
+          [0.211144622102029, 52.381221230824515],
+          [0.211121409094583, 52.381270198890789],
+          [0.211070944436726, 52.381333951514364],
+          [0.210941762451952, 52.381456275498536],
+          [0.210831273377301, 52.381532571728371],
+          [0.210695291747546, 52.381612198824378],
+          [0.210619667336778, 52.381639307978254],
+          [0.210471513389113, 52.381662064102123],
+          [0.210325708283639, 52.381670482609771],
+          [0.210164637307392, 52.381651124627865],
+          [0.210111049256786, 52.381637402769357],
+          [0.209695470544593, 52.381536688168353],
+          [0.208711127049413, 52.381303858219631],
+          [0.207184312148459, 52.380951256189427],
+          [0.206443586518028, 52.380785229576624],
+          [0.205648484931087, 52.380604511794807],
+          [0.205228547506045, 52.380509572842676],
+          [0.204468766537284, 52.380335325744092],
+          [0.203907092198578, 52.380204484568957],
+          [0.20382067466263, 52.380191103364716],
+          [0.203760363068211, 52.380181764406231],
+          [0.203693176286699, 52.380171360420739],
+          [0.203652407139164, 52.380167481865683],
+          [0.203479899776809, 52.380151070645596],
+          [0.203332940401442, 52.380150956207515],
+          [0.203083726410313, 52.380158458018045],
+          [0.203021505716879, 52.380173013299398],
+          [0.202815396196927, 52.380175878534516],
+          [0.202365885601932, 52.380121332764169],
+          [0.20228139951381, 52.38010582742649],
+          [0.201525170132598, 52.379937348156609],
+          [0.200737098096703, 52.37974967957387],
+          [0.199980718281778, 52.379580383149644],
+          [0.199773931396708, 52.379529398955661],
+          [0.198585685154609, 52.379153109794331],
+          [0.197462994920978, 52.378854784285167],
+          [0.196361947893042, 52.378547955873032],
+          [0.194910869290002, 52.378173908394821],
+          [0.194567392356239, 52.37812185835665],
+          [0.194400157893052, 52.378157325080863],
+          [0.19415359935448, 52.378132239704705],
+          [0.193832418333382, 52.378085166823929],
+          [0.193724726684018, 52.378075479561979],
+          [0.193433253715532, 52.378065609026912],
+          [0.193358099655144, 52.378059813341501],
+          [0.193349077851356, 52.377968200083878],
+          [0.193580653038318, 52.377747259578079],
+          [0.193745295431521, 52.377571518871889],
+          [0.193782183054632, 52.377487233147548],
+          [0.19380506250148, 52.377384240981101],
+          [0.193791034358314, 52.377308991451194],
+          [0.193766781137674, 52.377264495072978],
+          [0.193735279519072, 52.377222830821623],
+          [0.193701349474486, 52.377188402433291],
+          [0.193655514385376, 52.377153295874798],
+          [0.193591875402708, 52.377115824072781],
+          [0.192983049481596, 52.376837580546528],
+          [0.192413453946642, 52.376578382698526],
+          [0.192108807163573, 52.376449106056995],
+          [0.19175757928031, 52.376269543472425],
+          [0.191346582920468, 52.376130551792102],
+          [0.190956080516305, 52.376016437690389],
+          [0.190540365670125, 52.375928859808674],
+          [0.190377240279266, 52.375900421469673],
+          [0.190019849277134, 52.375862908877671],
+          [0.189847980092908, 52.375863397698879],
+          [0.189234857766959, 52.375881950236483],
+          [0.188704029931344, 52.375933225140294],
+          [0.188487157671825, 52.375974098029175],
+          [0.188386481014573, 52.375988547707735],
+          [0.187386831694061, 52.37606638722297],
+          [0.18502820697346, 52.37620441543104],
+          [0.184373149702579, 52.376266867265308],
+          [0.183953331943357, 52.376334046682608],
+          [0.182980804137176, 52.376426629059814],
+          [0.183069280392191, 52.376938371476058],
+          [0.183152149450345, 52.377577056205418],
+          [0.183193434835925, 52.378025934482551],
+          [0.182959693695875, 52.378051828923709],
+          [0.182947965136622, 52.379095966645302],
+          [0.183111607358398, 52.380654828685181],
+          [0.18316590413758, 52.381308422539796],
+          [0.183253106765366, 52.382093640359798],
+          [0.183329284749661, 52.382923019198181],
+          [0.183376950377994, 52.383210892094638],
+          [0.183328277906116, 52.383212615965576],
+          [0.183327277877928, 52.3832072393473],
+          [0.182827635801234, 52.383251268423741],
+          [0.182581021756416, 52.383274256990788],
+          [0.182297139683448, 52.383298382904101],
+          [0.18164328764086, 52.38335901229447],
+          [0.180498187243971, 52.38345523004147],
+          [0.18012967930283, 52.383488645313804],
+          [0.180144140657803, 52.383567416613104],
+          [0.180232889664627, 52.384002691690213],
+          [0.180287515340833, 52.384282228532044],
+          [0.180319311922411, 52.384444393755103],
+          [0.180408753702017, 52.384917511384636],
+          [0.180429057897837, 52.385031332811792],
+          [0.180460510550358, 52.385222278147182],
+          [0.180550486960379, 52.385706175950517],
+          [0.180573996293113, 52.385834325106224],
+          [0.180914814402086, 52.385802228897134],
+          [0.181593329140688, 52.385743306400485],
+          [0.181752785679018, 52.386634598713059],
+          [0.181852108884901, 52.387206352895255],
+          [0.181864076307747, 52.387210627843409],
+          [0.181873151562771, 52.387215855371856],
+          [0.181880980108311, 52.387225601826714],
+          [0.181884315331948, 52.38723363288112],
+          [0.181908251496171, 52.387450792886469],
+          [0.181888674480116, 52.387453132551279],
+          [0.181893565075046, 52.387488439436609],
+          [0.181895076182682, 52.387499502042047],
+          [0.181905387906481, 52.387571515932677],
+          [0.18192446628759, 52.387570983835609],
+          [0.182033028118828, 52.387567180942078],
+          [0.182159208915414, 52.387563052599106],
+          [0.182411836325307, 52.38756018568904],
+          [0.182768886599386, 52.387558986205342],
+          [0.182945386655112, 52.387562020194302],
+          [0.183194185538157, 52.38757091169667],
+          [0.183345902777191, 52.387577999667897],
+          [0.183605245590232, 52.387592090587177],
+          [0.183689334832228, 52.387598629377898],
+          [0.183729066230211, 52.387599693542604],
+          [0.183752558207251, 52.387599259426473],
+          [0.183783214047835, 52.387595096192022],
+          [0.184012748608083, 52.387600745241954],
+          [0.184020267247469, 52.38760420301297],
+          [0.184029254136584, 52.387607633647647],
+          [0.184038019278063, 52.387606572469927],
+          [0.184137899885507, 52.387635298637974],
+          [0.184143861586963, 52.387636986813582],
+          [0.184166107090269, 52.387641071563742],
+          [0.184204325930574, 52.387641264343415],
+          [0.184210110221841, 52.387639359066668],
+          [0.184461372924345, 52.38765944214164],
+          [0.18478560685286, 52.387716840434045],
+          [0.185373335805406, 52.387833656819453],
+          [0.186104820593226, 52.387974786483255],
+          [0.188078663787624, 52.388364467880471],
+          [0.18852550155665, 52.388455103521196],
+          [0.188961707581854, 52.388538740960392],
+          [0.18934011889897, 52.388612657359225],
+          [0.18941220228523, 52.388626581013469],
+          [0.189520327670163, 52.388647470903308],
+          [0.189673145929052, 52.388677000968848],
+          [0.189788374428354, 52.38869917071618],
+          [0.189884668560453, 52.388717662889547],
+          [0.189984689062981, 52.388737209906793],
+          [0.190574028696501, 52.388853341364175],
+          [0.190744462526504, 52.388886206786935],
+          [0.190779104542085, 52.389061439395952],
+          [0.191485094601462, 52.389074507311506],
+          [0.191682209767347, 52.389068244984387],
+          [0.192328334771586, 52.389194509423945],
+          [0.193199945227792, 52.389371660754563],
+          [0.193654362664641, 52.3894606078808],
+          [0.19405423146492, 52.389540135523042],
+          [0.194255000807628, 52.389581906501135],
+          [0.194561561268334, 52.38964095511696],
+          [0.194857697545684, 52.389700196553676],
+          [0.194920337396057, 52.389709733409049],
+          [0.194946024136105, 52.38971204378047],
+          [0.194976328956943, 52.389709682532306],
+          [0.195043375231328, 52.389717152978648],
+          [0.195056025480092, 52.389718562611186],
+          [0.19504216559309, 52.389766464208577],
+          [0.194758814942195, 52.390808458832439],
+          [0.194736107661376, 52.391327740055743],
+          [0.194735504268685, 52.391938302266823],
+          [0.19482498285858, 52.392764729464993],
+          [0.194928136128871, 52.393390443134606],
+          [0.19498663279343, 52.393651034984273],
+          [0.195048037676243, 52.393911571881169],
+          [0.195277143855921, 52.394738191465692],
+          [0.1954788575463, 52.395308138872707],
+          [0.195942308088755, 52.396677938780492],
+          [0.196382495176906, 52.397610304212215],
+          [0.196630185541482, 52.398039071364558],
+          [0.196758901919956, 52.398292962828052],
+          [0.196864312430036, 52.398550883211762],
+          [0.197020060496453, 52.399021901820461],
+          [0.19709705670085, 52.399192688052459],
+          [0.197123136964353, 52.399253368252388],
+          [0.19712544341666, 52.399261328092791],
+          [0.197174585916879, 52.399392414386689],
+          [0.197202951548853, 52.399475151275531],
+          [0.197226815469827, 52.399541247067759],
+          [0.197181778834358, 52.399551975381954],
+          [0.197136697541906, 52.399561805327131],
+          [0.197025840113793, 52.399579152344565],
+          [0.196923749776404, 52.399595437100785],
+          [0.196699186460617, 52.399631981939734],
+          [0.196672974127752, 52.399636965068737],
+          [0.196551925099236, 52.399656299437424],
+          [0.196521262198856, 52.399660466070053],
+          [0.196474578139298, 52.399667628004607],
+          [0.196427804823341, 52.399672993215653],
+          [0.196421974890597, 52.399674000747993],
+          [0.196389754087041, 52.399676397936418],
+          [0.196333945826475, 52.399677435113794],
+          [0.196267812475351, 52.399677764963371],
+          [0.196201768353655, 52.399679891481526],
+          [0.196135858067757, 52.399684713021372],
+          [0.196090508714152, 52.399689152455565],
+          [0.196023263597517, 52.399696696282412],
+          [0.195957576318153, 52.399706009488099],
+          [0.195893491478782, 52.399717990428321],
+          [0.195771374685796, 52.3997454364711],
+          [0.195675470273206, 52.399767899485099],
+          [0.195570932315235, 52.399794119542001],
+          [0.195515837506486, 52.399809529986953],
+          [0.195433239820321, 52.399833543960511],
+          [0.195352199885721, 52.399859327302579],
+          [0.195170361376901, 52.399927446100243],
+          [0.194899383329896, 52.400035884985606],
+          [0.194843176034203, 52.400058509229602],
+          [0.194567567477449, 52.400162537433623],
+          [0.194552605376637, 52.400167329162379],
+          [0.194516922400144, 52.400178763961456],
+          [0.194415292688384, 52.400215929573378],
+          [0.194403634564363, 52.400209719590706],
+          [0.194199437069751, 52.400300706403897],
+          [0.193773569118869, 52.400457923359617],
+          [0.192846675580288, 52.400828493246664],
+          [0.192537485525073, 52.400965473558216],
+          [0.192295328551091, 52.401063543751029],
+          [0.192020916030231, 52.401161222614675],
+          [0.191279439610089, 52.401416872821954],
+          [0.190772599190844, 52.401571894549356],
+          [0.190260050546779, 52.401670478406594],
+          [0.190639786156123, 52.401888171004778],
+          [0.191301878746646, 52.402402847864451],
+          [0.192578951511995, 52.403285548345927],
+          [0.193560222731044, 52.404010029617915],
+          [0.196304022475033, 52.405884210204306],
+          [0.197443584123277, 52.406715477197665],
+          [0.199030117692379, 52.407814478901422],
+          [0.200523315071126, 52.408865665323901],
+          [0.202516321044888, 52.410296940111216],
+          [0.203296426393867, 52.410814654756201],
+          [0.202658950014056, 52.411210554731099],
+          [0.202228041168787, 52.411533298120077],
+          [0.201387996505814, 52.412085695818874],
+          [0.200462595403214, 52.412726062764477],
+          [0.19817106537115, 52.414281142368402],
+          [0.198177670658872, 52.414294503647099],
+          [0.198351819303151, 52.414485521966867],
+          [0.198409528879957, 52.414542970069633],
+          [0.19842217515033, 52.414551456020646],
+          [0.198448133430078, 52.414570755207251],
+          [0.198508602239654, 52.414633472399785],
+          [0.198539548933151, 52.414664368144621],
+          [0.198576506273145, 52.414697849624204],
+          [0.198699221118955, 52.414799872059803],
+          [0.198716007308371, 52.41481214835045],
+          [0.19874356908342, 52.414834115189777],
+          [0.198769706437314, 52.414857007702238],
+          [0.198778968197281, 52.414865827229043],
+          [0.198819668641245, 52.414915424274739],
+          [0.198830354873157, 52.41492331811645],
+          [0.198887081930981, 52.414969919450343],
+          [0.198953294415718, 52.415029832018398],
+          [0.198981124623195, 52.415057188899581],
+          [0.199013496399102, 52.415087158826339],
+          [0.199047113879533, 52.415112609659097],
+          [0.199093020977116, 52.415148622014833],
+          [0.19915024030278, 52.41520510506426],
+          [0.199208660722104, 52.41525617064746],
+          [0.199267304789468, 52.41531172794965],
+          [0.199401067050498, 52.415428830194799],
+          [0.199466923273969, 52.415481555650828],
+          [0.199530923394362, 52.415535394628364],
+          [0.199788687809717, 52.415727068883456],
+          [0.200027890630102, 52.415944624830175],
+          [0.200266011266137, 52.416169933402571],
+          [0.200318975246044, 52.41621768311964],
+          [0.200382734202573, 52.416278449826763],
+          [0.200436857265408, 52.416331752840712],
+          [0.200518068255499, 52.416409279033104],
+          [0.200554551013525, 52.416456795967207],
+          [0.200617531712001, 52.416537359035871],
+          [0.200655116789909, 52.416595196006107],
+          [0.200708168105814, 52.416650586968053],
+          [0.200719357162174, 52.416663542662839],
+          [0.200788382106569, 52.416743507545469],
+          [0.200863179001555, 52.416839855907398],
+          [0.200957275650978, 52.41695167044562],
+          [0.201200243990998, 52.417247563030543],
+          [0.201454596387299, 52.417564419316925],
+          [0.201476185545284, 52.417591307465521],
+          [0.201604189668255, 52.417746100741155],
+          [0.201672837001662, 52.417810462544416],
+          [0.201798174831807, 52.417749321170056],
+          [0.202524181594136, 52.41741497491941],
+          [0.203113291195161, 52.417143673007139],
+          [0.20418497554236, 52.416661603225528],
+          [0.204558835315816, 52.416485584620595],
+          [0.205595121507338, 52.416011472602975],
+          [0.20590066314748, 52.415871675712701],
+          [0.20651509158814, 52.41559557784511],
+          [0.206878614124826, 52.415433772020457],
+          [0.2069642656782, 52.415396834916756],
+          [0.206999671074452, 52.415381427238323],
+          [0.207131961647155, 52.415321409349339],
+          [0.20720393852024, 52.415290392268275],
+          [0.209346993724183, 52.414300457229174],
+          [0.209397000629061, 52.414277132836787],
+          [0.211113483399602, 52.413492059262516],
+          [0.211373948978184, 52.413378385280623],
+          [0.211471688871698, 52.413333395810334],
+          [0.211563417416659, 52.413285821187017],
+          [0.211688934461532, 52.413237614246285],
+          [0.211796642552107, 52.413186143697132],
+          [0.211802815710506, 52.413183150793486],
+          [0.212047885520556, 52.413064548144078],
+          [0.212269176020581, 52.412961496333487],
+          [0.212876123126402, 52.412690270649819],
+          [0.212979871096479, 52.412647864980975],
+          [0.214148683155607, 52.412110024158864],
+          [0.21510123378555, 52.411667312218405],
+          [0.216108317230801, 52.411201181667593],
+          [0.217155991136901, 52.410706316186712],
+          [0.218448632552054, 52.410120499426618],
+          [0.218737575908765, 52.409980968053347],
+          [0.220135782517154, 52.409335172828655],
+          [0.220239993343897, 52.409947363508152],
+          [0.220385704207496, 52.410565066130005],
+          [0.220462174624202, 52.411061726138897],
+          [0.220518286726563, 52.411418535198592],
+          [0.220648237026464, 52.412161574255535],
+          [0.220838598500046, 52.412905187539124],
+          [0.220941107214669, 52.413306969652098],
+          [0.221033225202254, 52.413805273914498],
+          [0.22105415842739, 52.413792420590809],
+          [0.221148331563248, 52.413746860803087],
+          [0.221188837544286, 52.413675064063106],
+          [0.221585323710665, 52.413371781322674],
+          [0.221641648088701, 52.413322166751485],
+          [0.221665583654074, 52.413301035633779],
+          [0.221705227343443, 52.413270617426257],
+          [0.221750882683197, 52.413242783770194],
+          [0.221755154401958, 52.413240005925921],
+          [0.221795339836567, 52.413220367728599],
+          [0.221858759242435, 52.413194897696677],
+          [0.221894853514643, 52.413181630660311],
+          [0.221936869154488, 52.413169151495012],
+          [0.222313109531856, 52.413077555313052],
+          [0.22233482918982, 52.413070852680633],
+          [0.222538578090771, 52.412999583046876],
+          [0.222603375459575, 52.412972288323047],
+          [0.222665053960626, 52.412941455463987],
+          [0.222669325593211, 52.412938677586808],
+          [0.22295608771676, 52.412793012222139],
+          [0.223007843849856, 52.412769559258393],
+          [0.22309854119737, 52.412730986941995],
+          [0.223121594065307, 52.412721561529011],
+          [0.223452062914161, 52.412567879418056],
+          [0.223923850384046, 52.41238815882506],
+          [0.224137560370072, 52.412310404626595],
+          [0.22421259372999, 52.41228201720137],
+          [0.2242586985143, 52.412263165938114],
+          [0.224641276160169, 52.412093213669493],
+          [0.22467870208429, 52.412077223132485],
+          [0.224741801706367, 52.412045463211037],
+          [0.224763249211594, 52.412033370121023],
+          [0.224924681381312, 52.411939513822908],
+          [0.224983418809539, 52.411908735060429],
+          [0.22506787487933, 52.411863085161094],
+          [0.225419822985118, 52.41169820275757],
+          [0.225816402821124, 52.411514495103205],
+          [0.2259571982544, 52.411448900713218],
+          [0.226135910924373, 52.411371262300662],
+          [0.226373352513177, 52.411277321194738],
+          [0.226474353656707, 52.411233246908225],
+          [0.226907672180057, 52.41104929302243],
+          [0.227296927669255, 52.410878037052264],
+          [0.22750057204486, 52.41079920735357],
+          [0.227716940962237, 52.410713213732642],
+          [0.227833953280863, 52.410665959080163],
+          [0.227878678444152, 52.410646053327511],
+          [0.228164130405466, 52.410510020782354],
+          [0.228448480447831, 52.410378414312589],
+          [0.228732589361092, 52.410247890701925],
+          [0.229076307574834, 52.410083601730676],
+          [0.229205261842464, 52.410028297523681],
+          [0.229446937310407, 52.409925278278884],
+          [0.229708131622264, 52.409812808519455],
+          [0.230019591656163, 52.40968248508743],
+          [0.230121071540397, 52.409639297716986],
+          [0.230126117642856, 52.409637314214073],
+          [0.230519323890106, 52.409501130939823],
+          [0.230642437062223, 52.40944377727913],
+          [0.230738856145515, 52.409402303405315],
+          [0.230892696541184, 52.409330342218041],
+          [0.231195967282686, 52.409203946727764],
+          [0.231541643147517, 52.409037994798197],
+          [0.231700149633425, 52.408965315075363],
+          [0.231820637957332, 52.408908459647542],
+          [0.231859074850994, 52.408889300609559],
+          [0.23209092916242, 52.408798780771043],
+          [0.23213575467088, 52.408780939714859],
+          [0.23221374956962, 52.40874736594261],
+          [0.232471483354274, 52.408630729745063],
+          [0.23252639899552, 52.408603076655091],
+          [0.232604696014971, 52.408569676744044],
+          [0.232678278861607, 52.408536096056778],
+          [0.232772152089869, 52.408499614361084],
+          [0.232898675794503, 52.408454603007556],
+          [0.233015948626304, 52.408404011444745],
+          [0.233085857011637, 52.408373377309218],
+          [0.2331751129605, 52.408327001496758],
+          [0.233206429946006, 52.408306627714801],
+          [0.233300698420369, 52.408251794645878],
+          [0.233415031696752, 52.408186691329028],
+          [0.233626161569885, 52.408058614078129],
+          [0.233697517174784, 52.408015903074372],
+          [0.233731570090883, 52.407994398420776],
+          [0.233748710833434, 52.407984453201522],
+          [0.233815128151693, 52.407940037055603],
+          [0.233827848633038, 52.407929905594109],
+          [0.23384478051629, 52.407915828032934],
+          [0.233920044554252, 52.407860274532617],
+          [0.234115461081769, 52.407720983661058],
+          [0.234217559977229, 52.407637857180603],
+          [0.234219810267354, 52.407635836432028],
+          [0.234309244346143, 52.407569764085117],
+          [0.23439720931009, 52.407503719434196],
+          [0.234444728404186, 52.407466493958793],
+          [0.23447354875773, 52.407443289602256],
+          [0.234516529495276, 52.407403542228607],
+          [0.23451927828219, 52.407400621852666],
+          [0.23452350594978, 52.407396126914762],
+          [0.234551919132337, 52.407361960112901],
+          [0.234554629792399, 52.407357412922366],
+          [0.234584137850278, 52.407318729464109],
+          [0.234605250539113, 52.407288477248791],
+          [0.23463345156069, 52.40725593297784],
+          [0.23472229883203, 52.407160827537922],
+          [0.234788771537814, 52.407090791824331],
+          [0.234796420700711, 52.407082725349909],
+          [0.234802468779515, 52.407077305787524],
+          [0.234902249464413, 52.407006541399426],
+          [0.234977383408919, 52.406957194047372],
+          [0.235099353559148, 52.406883312381837],
+          [0.23520356401138, 52.40681875830024],
+          [0.235309394418294, 52.406754263407962],
+          [0.235350070497926, 52.406730025363267],
+          [0.235461062136009, 52.406660900808674],
+          [0.235519686956362, 52.406624400008077],
+          [0.235558300392609, 52.406602988385956],
+          [0.235562896145687, 52.406600833334096],
+          [0.235598064620633, 52.406583982801699],
+          [0.235641008739008, 52.406566805364811],
+          [0.235643900954633, 52.406565851475463],
+          [0.235690382327359, 52.406551754289609],
+          [0.235719941958335, 52.406543192433823],
+          [0.235809789793327, 52.406520272203167],
+          [0.236102111559079, 52.406454227381886],
+          [0.236217351369711, 52.406430466833591],
+          [0.236317589487264, 52.406409507710521],
+          [0.23652950692356, 52.406361258239286],
+          [0.236619098205849, 52.406344906328684],
+          [0.236658366013456, 52.406323657295125],
+          [0.237503889342013, 52.4060376100269],
+          [0.237773024749553, 52.405954629273332],
+        ],
+      ],
+    };
 
-<script>
-  const WITCHFORD_BOUNDARY = {"type":"Polygon","coordinates":[ [ [ 0.237773024749553, 52.405954629273332 ], [ 0.238672149112982, 52.405677401239146 ], [ 0.239028447285551, 52.405658967103768 ], [ 0.239537873551783, 52.405561702193225 ], [ 0.23997083647404, 52.405508295309978 ], [ 0.240958193561699, 52.405418207930097 ], [ 0.24154834958241, 52.405351674871405 ], [ 0.241620982643345, 52.405358196928034 ], [ 0.241582278707876, 52.405344688568462 ], [ 0.241533399207221, 52.405337522732324 ], [ 0.241521557914104, 52.405335948889437 ], [ 0.241471346282182, 52.405331505866648 ], [ 0.241421271282498, 52.405329757809902 ], [ 0.241399239646166, 52.405330175566689 ], [ 0.241274029392406, 52.405325356143962 ], [ 0.241231811855915, 52.405313298148641 ], [ 0.241191224816254, 52.405298601566081 ], [ 0.24117830192054, 52.405293091748661 ], [ 0.240956125977205, 52.405153253288894 ], [ 0.240864055524608, 52.405091605641459 ], [ 0.240697365167246, 52.40497031725473 ], [ 0.240667033838848, 52.404952009162066 ], [ 0.240627562176688, 52.404927400133175 ], [ 0.240606448646914, 52.404916920113244 ], [ 0.24060346559668, 52.404916077464485 ], [ 0.240578082360014, 52.404908375949205 ], [ 0.240552987129458, 52.40490345646618 ], [ 0.240524742566937, 52.404900215217815 ], [ 0.240499728079835, 52.40489979015539 ], [ 0.24026796818648, 52.404921806900795 ], [ 0.240050882044687, 52.404943275359052 ], [ 0.24002302558234, 52.404944792355366 ], [ 0.240001296968616, 52.404945383950256 ], [ 0.23997303752236, 52.404944750509777 ], [ 0.239950442543291, 52.404942750855035 ], [ 0.239898109438928, 52.404931243754241 ], [ 0.23984698491582, 52.404905866169337 ], [ 0.239832843023456, 52.404896602699566 ], [ 0.239775171268543, 52.404855163684552 ], [ 0.239718089636557, 52.404807958631274 ], [ 0.239661596888275, 52.404757864979317 ], [ 0.239606158435379, 52.404711168256931 ], [ 0.239554197593106, 52.404657661681313 ], [ 0.239533525584883, 52.40463557353084 ], [ 0.239498114525604, 52.404595331180509 ], [ 0.239467718034259, 52.404549598664012 ], [ 0.239451404870824, 52.404520683978511 ], [ 0.239423269307621, 52.404458633239358 ], [ 0.239400035848774, 52.404385969075754 ], [ 0.239385934142797, 52.404328148417605 ], [ 0.239373115386964, 52.404275338928812 ], [ 0.239365528965988, 52.404232950862024 ], [ 0.239362198068266, 52.404199114419988 ], [ 0.239359009500511, 52.404165185362181 ], [ 0.239360176535365, 52.404141784256346 ], [ 0.239363076196255, 52.404123565640923 ], [ 0.239369522864557, 52.404097007259857 ], [ 0.239380253602979, 52.404076662062344 ], [ 0.239398750434738, 52.404055810057791 ], [ 0.239428015794423, 52.404032775814294 ], [ 0.239458358014064, 52.404013587687849 ], [ 0.239495795632301, 52.403995164316733 ], [ 0.239531689145093, 52.403981086311049 ], [ 0.239681572215498, 52.403939041712285 ], [ 0.239733353972495, 52.403928079530544 ], [ 0.239778912424831, 52.403916156216376 ], [ 0.239817205811147, 52.403903021759284 ], [ 0.239853346137455, 52.403890917199334 ], [ 0.2398849242795, 52.403878719239628 ], [ 0.239920914388909, 52.403863650169974 ], [ 0.239935243406523, 52.403853397604777 ], [ 0.239942568028598, 52.403844176961933 ], [ 0.23994763949482, 52.403834009903825 ], [ 0.239952539266627, 52.403817551752155 ], [ 0.239954111022219, 52.403802145777398 ], [ 0.239951143798281, 52.403775495991205 ], [ 0.239944257771684, 52.403746942242208 ], [ 0.239888042703269, 52.403609441943566 ], [ 0.239817402502105, 52.403419342447023 ], [ 0.239797955331885, 52.403357576750899 ], [ 0.239787023914401, 52.40328108277297 ], [ 0.239780048949025, 52.403204333986103 ], [ 0.239773852940131, 52.40306750438279 ], [ 0.239777417870687, 52.402923116442331 ], [ 0.239777492572782, 52.402878155403151 ], [ 0.239774067195247, 52.402839555033005 ], [ 0.23976934353119, 52.40281015102677 ], [ 0.239750922284389, 52.402754120714626 ], [ 0.239725428613791, 52.402697774814413 ], [ 0.239716063850846, 52.402681227280411 ], [ 0.239702835491772, 52.402652254178278 ], [ 0.239691096830348, 52.402638179443123 ], [ 0.239682096108598, 52.402628818548635 ], [ 0.239669836973364, 52.402618979878099 ], [ 0.239655205190603, 52.402608736566478 ], [ 0.239632032270435, 52.40259820549096 ], [ 0.239587661469086, 52.402584209525699 ], [ 0.239529071723184, 52.402571022462574 ], [ 0.239334053201561, 52.402543245525514 ], [ 0.23910106611847, 52.402523381056575 ], [ 0.238781892137425, 52.40249112117754 ], [ 0.238629919733147, 52.402474397107767 ], [ 0.238477480883716, 52.402454264747526 ], [ 0.23819435828813, 52.402413947179141 ], [ 0.237971569021366, 52.402377701943244 ], [ 0.237840968673063, 52.402356256095864 ], [ 0.237710574414072, 52.402335975153846 ], [ 0.237704654224305, 52.402335188039103 ], [ 0.237580182019406, 52.402321538781408 ], [ 0.237454418487381, 52.402311420685578 ], [ 0.23730075006535, 52.402301830641171 ], [ 0.237203463996048, 52.402293780913617 ], [ 0.237104171800958, 52.402286758185753 ], [ 0.236875746228184, 52.402281459852787 ], [ 0.236734424205818, 52.402280537423877 ], [ 0.236591733470604, 52.402281618946027 ], [ 0.236321570363218, 52.402294014088326 ], [ 0.236162860351151, 52.402298095743035 ], [ 0.236002590765158, 52.402300408303553 ], [ 0.235859601643835, 52.402301404665096 ], [ 0.235718234120672, 52.402299582688713 ], [ 0.235597497816752, 52.402295841711918 ], [ 0.235477827472929, 52.402289922393159 ], [ 0.235387736716333, 52.402284612505547 ], [ 0.235297642980778, 52.402276335275054 ], [ 0.23527382462286, 52.40227336877382 ], [ 0.235187763047034, 52.402260519253332 ], [ 0.23510318991992, 52.402245123790287 ], [ 0.235073306144289, 52.402238495339141 ], [ 0.234986795151153, 52.402216752180578 ], [ 0.234903236790538, 52.40219234547861 ], [ 0.23482354406341, 52.4021658874113 ], [ 0.234745192979244, 52.402136886191251 ], [ 0.234667044927984, 52.402106082700243 ], [ 0.234592913937523, 52.402073314915413 ], [ 0.234585388957118, 52.40206986041138 ], [ 0.234547677814676, 52.402050881051792 ], [ 0.234509765358805, 52.402030826457185 ], [ 0.234453953772453, 52.401994025587669 ], [ 0.234404165437002, 52.401954233421833 ], [ 0.2343581746424, 52.401911042444553 ], [ 0.234318747557912, 52.401866828187337 ], [ 0.234283534297508, 52.401821635075244 ], [ 0.234275917276403, 52.401810539169581 ], [ 0.23423262601526, 52.401733487541414 ], [ 0.234198028868308, 52.401653933668108 ], [ 0.234172930824381, 52.401584900608931 ], [ 0.234152055658736, 52.401515068373584 ], [ 0.234140310227231, 52.401451357906559 ], [ 0.234131461290365, 52.401386783418808 ], [ 0.234125930912519, 52.401207499362805 ], [ 0.234119883823736, 52.401081996687651 ], [ 0.234095042436132, 52.400884194617817 ], [ 0.234085292111797, 52.400798865850156 ], [ 0.23407405958049, 52.400713295339287 ], [ 0.234064527477822, 52.40066428975998 ], [ 0.234055302400732, 52.400624270286578 ], [ 0.23404466317622, 52.400585356570375 ], [ 0.234031086716518, 52.400546498369401 ], [ 0.234022660140827, 52.400531011715167 ], [ 0.233980847599218, 52.400471556200721 ], [ 0.233930111260189, 52.400415866133244 ], [ 0.233912456773966, 52.400398126113977 ], [ 0.23369303612437, 52.400201304328604 ], [ 0.233629042154038, 52.400145055539156 ], [ 0.233562992289875, 52.400088845568241 ], [ 0.233505478224848, 52.400041556068331 ], [ 0.233444668150927, 52.399995947363074 ], [ 0.233353400015871, 52.399932300950368 ], [ 0.233295961827105, 52.399889415944877 ], [ 0.233237154953816, 52.399848534987946 ], [ 0.233235640981267, 52.399847664405272 ], [ 0.233196966651301, 52.399824117044211 ], [ 0.233157171918737, 52.399801669865617 ], [ 0.233038969107663, 52.39975480742325 ], [ 0.232884412753592, 52.399695413579046 ], [ 0.232752148860597, 52.399640813721234 ], [ 0.232736062927548, 52.399633744247261 ], [ 0.232328895139964, 52.399427428322063 ], [ 0.232222423028294, 52.399382861268627 ], [ 0.23216373425419, 52.399361759710168 ], [ 0.232107160507457, 52.399341787125458 ], [ 0.232018186169893, 52.399314783284829 ], [ 0.231990173167, 52.399307309515955 ], [ 0.231950117751015, 52.399300063146519 ], [ 0.231921987876757, 52.399296098400832 ], [ 0.231891352340052, 52.399292001125957 ], [ 0.231834692844422, 52.39928488841759 ], [ 0.231817778660562, 52.399281790889255 ], [ 0.231759478322238, 52.399271292215715 ], [ 0.231685435967475, 52.39925470651562 ], [ 0.231635357017993, 52.399241085321037 ], [ 0.231469398263589, 52.399191616622197 ], [ 0.231379986713308, 52.399167588106202 ], [ 0.231268652558449, 52.399143164164727 ], [ 0.231306532022049, 52.399078157065809 ], [ 0.231311786277951, 52.399071583710693 ], [ 0.231318978695502, 52.399062635873427 ], [ 0.23132173454901, 52.399058987090122 ], [ 0.231325958983402, 52.399055310578561 ], [ 0.231335921758844, 52.399048828158428 ], [ 0.231345929859241, 52.39904324406924 ], [ 0.231354424048362, 52.399036789376062 ], [ 0.231365583426454, 52.399024889234575 ], [ 0.231373940705472, 52.399009894842884 ], [ 0.231375984925643, 52.399006709088653 ], [ 0.231377904951797, 52.399003975273132 ], [ 0.231380326285361, 52.39899952353575 ], [ 0.23138221546805, 52.398987438751561 ], [ 0.231379950946459, 52.398983345246016 ], [ 0.231379177668273, 52.398979673177472 ], [ 0.231332878372304, 52.398904026499778 ], [ 0.231309450021246, 52.398853394992834 ], [ 0.231289251679486, 52.398811424616213 ], [ 0.231276826829622, 52.398792416590069 ], [ 0.231259463246618, 52.398760013993822 ], [ 0.231257910371504, 52.398755457455906 ], [ 0.231234435047652, 52.398706805033243 ], [ 0.231214032887121, 52.398660792147261 ], [ 0.231203046773233, 52.398638250118083 ], [ 0.231182776081001, 52.398609409228065 ], [ 0.231066880602722, 52.39847123406313 ], [ 0.230900471812753, 52.398255423355451 ], [ 0.230834243590521, 52.398172239834075 ], [ 0.230585860351711, 52.397858256162998 ], [ 0.230468120425903, 52.397718406767062 ], [ 0.230453805271601, 52.397699794006144 ], [ 0.230446149964082, 52.39769373409468 ], [ 0.230327570254773, 52.397569276517991 ], [ 0.230171672469396, 52.397410184992914 ], [ 0.230000079280245, 52.397240059668853 ], [ 0.229845928666152, 52.397086419791236 ], [ 0.229743535908843, 52.39698557459716 ], [ 0.229738083594765, 52.396979473074509 ], [ 0.229316186465235, 52.396596825397168 ], [ 0.229064396932527, 52.396381094089257 ], [ 0.228518761226132, 52.395925785214153 ], [ 0.228400664036157, 52.395828202324772 ], [ 0.228267481829496, 52.395720023579855 ], [ 0.228202313418396, 52.395669369199737 ], [ 0.22812819808615, 52.395610341187052 ], [ 0.228089483362932, 52.395594615978254 ], [ 0.228085244930345, 52.395592178163142 ], [ 0.228080584059725, 52.395590107987516 ], [ 0.228075855305686, 52.395586690309919 ], [ 0.228071314129549, 52.395584078364593 ], [ 0.228069301030963, 52.395582048187023 ], [ 0.228058076371468, 52.395569311508531 ], [ 0.228054233228294, 52.395565967051908 ], [ 0.228039021084821, 52.395552855955877 ], [ 0.228024857473976, 52.395543052084363 ], [ 0.22801537283262, 52.395535677723416 ], [ 0.227992258139003, 52.395523255122264 ], [ 0.227980087503272, 52.395517999529488 ], [ 0.227970054181067, 52.395514322179025 ], [ 0.227966728520563, 52.395512496582782 ], [ 0.227955107038868, 52.395509388684999 ], [ 0.227934408214846, 52.395506991429983 ], [ 0.227931118758606, 52.395505884500416 ], [ 0.227927994250335, 52.395505134136194 ], [ 0.227925439027879, 52.395504013364331 ], [ 0.227921173461401, 52.395501036542228 ], [ 0.227913170888661, 52.395493903988864 ], [ 0.227910333063404, 52.39549009098107 ], [ 0.227909646121577, 52.395488125718437 ], [ 0.227909501314015, 52.395485251047504 ], [ 0.22790752194324, 52.395480972261907 ], [ 0.227905697576915, 52.395465180950517 ], [ 0.227836403808799, 52.395402644944504 ], [ 0.227794109464454, 52.395368373934339 ], [ 0.227732160002583, 52.395329078299447 ], [ 0.227702373655879, 52.395309677824478 ], [ 0.227520987820297, 52.39518990818901 ], [ 0.227117505839316, 52.394932881794922 ], [ 0.226885062822079, 52.394788626369632 ], [ 0.226772151309361, 52.39471216497504 ], [ 0.226767711916141, 52.394708651874218 ], [ 0.226497539369389, 52.394518528684202 ], [ 0.226443042952691, 52.394481250008781 ], [ 0.226435382097314, 52.394477977425367 ], [ 0.226353870894867, 52.394435452860691 ], [ 0.226323747083281, 52.394421003930468 ], [ 0.226310311765065, 52.394413973616381 ], [ 0.226218854011687, 52.394375323010365 ], [ 0.226139650052004, 52.394340667687104 ], [ 0.226113904534915, 52.394325596715078 ], [ 0.226064487637521, 52.394301620079915 ], [ 0.226007014878987, 52.394281122162035 ], [ 0.225987434860632, 52.394274657148685 ], [ 0.225962344805944, 52.394266767299669 ], [ 0.225961034616018, 52.394269939135555 ], [ 0.225953681081168, 52.394266930488747 ], [ 0.225906516884141, 52.394249745183409 ], [ 0.225765684211765, 52.394199615426288 ], [ 0.225729827187357, 52.3941880618083 ], [ 0.225666849373855, 52.394172073427697 ], [ 0.225601707459526, 52.394159812439796 ], [ 0.225534484989139, 52.394150018404758 ], [ 0.225518241916373, 52.394148525922937 ], [ 0.225429153405318, 52.394133568647305 ], [ 0.22529528014591, 52.39411073250227 ], [ 0.225163248257418, 52.394092357473099 ], [ 0.224996640759426, 52.394073284501928 ], [ 0.224885370311702, 52.394052719893772 ], [ 0.224673763963486, 52.394077025224036 ], [ 0.224608012455019, 52.394029257250502 ], [ 0.224309852692555, 52.393676902951654 ], [ 0.22396349000115, 52.393260263932909 ], [ 0.223455278243516, 52.392641204761759 ], [ 0.223016656280398, 52.392078831978914 ], [ 0.222805732801067, 52.391807472804551 ], [ 0.222004982629404, 52.390902455292149 ], [ 0.222060145714419, 52.390879616359761 ], [ 0.223620520729347, 52.390233486059529 ], [ 0.225080224715356, 52.389629315257714 ], [ 0.226395019041831, 52.389113504001607 ], [ 0.226754945508984, 52.388971588720338 ], [ 0.227027851057959, 52.388831312322182 ], [ 0.22711529756021, 52.388776372100502 ], [ 0.227196572217946, 52.388660643400407 ], [ 0.227219755674014, 52.388565042640984 ], [ 0.227193405717349, 52.388474180813326 ], [ 0.227192589082885, 52.388396161927822 ], [ 0.227246657479647, 52.388296171897508 ], [ 0.227141569241412, 52.388309572205799 ], [ 0.22693693461109, 52.388322944828715 ], [ 0.226603829606719, 52.388317802018804 ], [ 0.226147897038818, 52.388282616698447 ], [ 0.22595378018867, 52.388257724137731 ], [ 0.225596912077101, 52.388213057185013 ], [ 0.225283745370876, 52.388171372489694 ], [ 0.224792727994055, 52.388087991531016 ], [ 0.224430915049838, 52.388006775843422 ], [ 0.224423582336457, 52.387772178094203 ], [ 0.22439596166471, 52.386972357514146 ], [ 0.22438468008036, 52.386975375341748 ], [ 0.224026773208483, 52.386895160371779 ], [ 0.223553786774458, 52.38673573324477 ], [ 0.223402917997523, 52.386467826401542 ], [ 0.223648916606969, 52.386172400107185 ], [ 0.223828977912015, 52.386003650937553 ], [ 0.224001186627336, 52.385962284429048 ], [ 0.224121270058103, 52.385986100806434 ], [ 0.224243194401583, 52.386014378353998 ], [ 0.224290627065366, 52.386022477427318 ], [ 0.224318838204707, 52.386028240727413 ], [ 0.224364983400407, 52.386039960758957 ], [ 0.224448510079807, 52.386064464927323 ], [ 0.224699801698499, 52.386140427460973 ], [ 0.224716630944963, 52.386103954257933 ], [ 0.224691701707497, 52.385762785908895 ], [ 0.224730977381585, 52.385763853854016 ], [ 0.224707732693765, 52.385100222735169 ], [ 0.224678136167595, 52.385100797916614 ], [ 0.224673284082073, 52.384977412683803 ], [ 0.224672177665458, 52.384949270926029 ], [ 0.224599473628926, 52.384940065193746 ], [ 0.224586738886953, 52.384946320505129 ], [ 0.224276991417438, 52.384914088621848 ], [ 0.224280711769898, 52.384903030509399 ], [ 0.224242628336516, 52.384899062575009 ], [ 0.223249722105978, 52.38478787775761 ], [ 0.22307520896686, 52.384768681256098 ], [ 0.222499605573606, 52.384622150600748 ], [ 0.222271310444728, 52.384582195083937 ], [ 0.222252178399554, 52.38454476199405 ], [ 0.222207550910463, 52.384314231089483 ], [ 0.222126740313222, 52.383963053097922 ], [ 0.222069456746268, 52.383693501443858 ], [ 0.221317642288312, 52.383529201308257 ], [ 0.22019222028961, 52.383285171783946 ], [ 0.220192707843607, 52.383270874500738 ], [ 0.220113544671265, 52.38325410829605 ], [ 0.220115935867217, 52.383175833875747 ], [ 0.220121579686335, 52.38298959559004 ], [ 0.220027379731058, 52.382971852978557 ], [ 0.219603316407334, 52.382954641927512 ], [ 0.219567249788213, 52.382953341171067 ], [ 0.219566157653171, 52.382963792283533 ], [ 0.219496284837229, 52.382982818746775 ], [ 0.21949564047917, 52.383001318185784 ], [ 0.219438703009753, 52.382999923838966 ], [ 0.219418561531458, 52.38299942992748 ], [ 0.219418374846059, 52.383005961549486 ], [ 0.219418007071609, 52.383019429323639 ], [ 0.21937480869944, 52.38301890987389 ], [ 0.218835620907422, 52.382994506681776 ], [ 0.218797785203673, 52.382992798305892 ], [ 0.218792973648019, 52.383020215016657 ], [ 0.218527185496162, 52.383267087303807 ], [ 0.218381097942416, 52.38339850392218 ], [ 0.218225935866988, 52.383431000046919 ], [ 0.218222759396961, 52.383433472200068 ], [ 0.218045513160375, 52.38305520501175 ], [ 0.217990398769895, 52.382777480076406 ], [ 0.217946776556936, 52.382141675556802 ], [ 0.218460083415984, 52.381771478256105 ], [ 0.219093444672347, 52.381420598347134 ], [ 0.220431712912647, 52.380711191051709 ], [ 0.2221817081385, 52.379714366774031 ], [ 0.223286614930157, 52.379071341525574 ], [ 0.224374492138059, 52.378381790891297 ], [ 0.225525408936662, 52.377775722048277 ], [ 0.225507148963922, 52.377752672612544 ], [ 0.224571581493329, 52.376571672805213 ], [ 0.223122817232732, 52.374843682115518 ], [ 0.221276057414076, 52.372677199148029 ], [ 0.220849865457037, 52.372236553653281 ], [ 0.220360047075884, 52.371676136126624 ], [ 0.219545115419706, 52.37204355614697 ], [ 0.218359132688314, 52.372570096667921 ], [ 0.218314021706117, 52.372600682526524 ], [ 0.218268672414607, 52.37262651433025 ], [ 0.217905613337109, 52.372789162256595 ], [ 0.217053538687435, 52.373160829944261 ], [ 0.215572484321964, 52.373819075932474 ], [ 0.214157443246329, 52.374437999399142 ], [ 0.213119407295725, 52.374901151475243 ], [ 0.212474689279069, 52.375184444746743 ], [ 0.21192503180127, 52.375437167340991 ], [ 0.211461459777196, 52.375658537347654 ], [ 0.21114606861703, 52.375811469199029 ], [ 0.21079439512593, 52.376078562094889 ], [ 0.210171610613104, 52.376544861322024 ], [ 0.20976881212625, 52.376839315618327 ], [ 0.209643053660838, 52.376936593969489 ], [ 0.209607585362987, 52.376973657316491 ], [ 0.209543507030765, 52.377068355039107 ], [ 0.209486614232606, 52.377166843310533 ], [ 0.209457052077709, 52.377228776513547 ], [ 0.209444248163346, 52.377346068680232 ], [ 0.209428724396432, 52.377549058486814 ], [ 0.209430239489364, 52.37762611306939 ], [ 0.209442194944212, 52.377678706028099 ], [ 0.209522498697615, 52.377885613714547 ], [ 0.209664588252563, 52.378255525286121 ], [ 0.209786311032894, 52.378544450954571 ], [ 0.209836212351064, 52.378656287566407 ], [ 0.209920164470562, 52.378796036523269 ], [ 0.210212034346749, 52.379315883872692 ], [ 0.210444400396852, 52.379718365780882 ], [ 0.210691964283099, 52.380144828395494 ], [ 0.210985186044816, 52.380644664151369 ], [ 0.211057350175158, 52.380781777083399 ], [ 0.21108733110051, 52.380868291642471 ], [ 0.211141943120317, 52.381074252008084 ], [ 0.211148619790886, 52.38116120264651 ], [ 0.211144622102029, 52.381221230824515 ], [ 0.211121409094583, 52.381270198890789 ], [ 0.211070944436726, 52.381333951514364 ], [ 0.210941762451952, 52.381456275498536 ], [ 0.210831273377301, 52.381532571728371 ], [ 0.210695291747546, 52.381612198824378 ], [ 0.210619667336778, 52.381639307978254 ], [ 0.210471513389113, 52.381662064102123 ], [ 0.210325708283639, 52.381670482609771 ], [ 0.210164637307392, 52.381651124627865 ], [ 0.210111049256786, 52.381637402769357 ], [ 0.209695470544593, 52.381536688168353 ], [ 0.208711127049413, 52.381303858219631 ], [ 0.207184312148459, 52.380951256189427 ], [ 0.206443586518028, 52.380785229576624 ], [ 0.205648484931087, 52.380604511794807 ], [ 0.205228547506045, 52.380509572842676 ], [ 0.204468766537284, 52.380335325744092 ], [ 0.203907092198578, 52.380204484568957 ], [ 0.20382067466263, 52.380191103364716 ], [ 0.203760363068211, 52.380181764406231 ], [ 0.203693176286699, 52.380171360420739 ], [ 0.203652407139164, 52.380167481865683 ], [ 0.203479899776809, 52.380151070645596 ], [ 0.203332940401442, 52.380150956207515 ], [ 0.203083726410313, 52.380158458018045 ], [ 0.203021505716879, 52.380173013299398 ], [ 0.202815396196927, 52.380175878534516 ], [ 0.202365885601932, 52.380121332764169 ], [ 0.20228139951381, 52.38010582742649 ], [ 0.201525170132598, 52.379937348156609 ], [ 0.200737098096703, 52.37974967957387 ], [ 0.199980718281778, 52.379580383149644 ], [ 0.199773931396708, 52.379529398955661 ], [ 0.198585685154609, 52.379153109794331 ], [ 0.197462994920978, 52.378854784285167 ], [ 0.196361947893042, 52.378547955873032 ], [ 0.194910869290002, 52.378173908394821 ], [ 0.194567392356239, 52.37812185835665 ], [ 0.194400157893052, 52.378157325080863 ], [ 0.19415359935448, 52.378132239704705 ], [ 0.193832418333382, 52.378085166823929 ], [ 0.193724726684018, 52.378075479561979 ], [ 0.193433253715532, 52.378065609026912 ], [ 0.193358099655144, 52.378059813341501 ], [ 0.193349077851356, 52.377968200083878 ], [ 0.193580653038318, 52.377747259578079 ], [ 0.193745295431521, 52.377571518871889 ], [ 0.193782183054632, 52.377487233147548 ], [ 0.19380506250148, 52.377384240981101 ], [ 0.193791034358314, 52.377308991451194 ], [ 0.193766781137674, 52.377264495072978 ], [ 0.193735279519072, 52.377222830821623 ], [ 0.193701349474486, 52.377188402433291 ], [ 0.193655514385376, 52.377153295874798 ], [ 0.193591875402708, 52.377115824072781 ], [ 0.192983049481596, 52.376837580546528 ], [ 0.192413453946642, 52.376578382698526 ], [ 0.192108807163573, 52.376449106056995 ], [ 0.19175757928031, 52.376269543472425 ], [ 0.191346582920468, 52.376130551792102 ], [ 0.190956080516305, 52.376016437690389 ], [ 0.190540365670125, 52.375928859808674 ], [ 0.190377240279266, 52.375900421469673 ], [ 0.190019849277134, 52.375862908877671 ], [ 0.189847980092908, 52.375863397698879 ], [ 0.189234857766959, 52.375881950236483 ], [ 0.188704029931344, 52.375933225140294 ], [ 0.188487157671825, 52.375974098029175 ], [ 0.188386481014573, 52.375988547707735 ], [ 0.187386831694061, 52.37606638722297 ], [ 0.18502820697346, 52.37620441543104 ], [ 0.184373149702579, 52.376266867265308 ], [ 0.183953331943357, 52.376334046682608 ], [ 0.182980804137176, 52.376426629059814 ], [ 0.183069280392191, 52.376938371476058 ], [ 0.183152149450345, 52.377577056205418 ], [ 0.183193434835925, 52.378025934482551 ], [ 0.182959693695875, 52.378051828923709 ], [ 0.182947965136622, 52.379095966645302 ], [ 0.183111607358398, 52.380654828685181 ], [ 0.18316590413758, 52.381308422539796 ], [ 0.183253106765366, 52.382093640359798 ], [ 0.183329284749661, 52.382923019198181 ], [ 0.183376950377994, 52.383210892094638 ], [ 0.183328277906116, 52.383212615965576 ], [ 0.183327277877928, 52.3832072393473 ], [ 0.182827635801234, 52.383251268423741 ], [ 0.182581021756416, 52.383274256990788 ], [ 0.182297139683448, 52.383298382904101 ], [ 0.18164328764086, 52.38335901229447 ], [ 0.180498187243971, 52.38345523004147 ], [ 0.18012967930283, 52.383488645313804 ], [ 0.180144140657803, 52.383567416613104 ], [ 0.180232889664627, 52.384002691690213 ], [ 0.180287515340833, 52.384282228532044 ], [ 0.180319311922411, 52.384444393755103 ], [ 0.180408753702017, 52.384917511384636 ], [ 0.180429057897837, 52.385031332811792 ], [ 0.180460510550358, 52.385222278147182 ], [ 0.180550486960379, 52.385706175950517 ], [ 0.180573996293113, 52.385834325106224 ], [ 0.180914814402086, 52.385802228897134 ], [ 0.181593329140688, 52.385743306400485 ], [ 0.181752785679018, 52.386634598713059 ], [ 0.181852108884901, 52.387206352895255 ], [ 0.181864076307747, 52.387210627843409 ], [ 0.181873151562771, 52.387215855371856 ], [ 0.181880980108311, 52.387225601826714 ], [ 0.181884315331948, 52.38723363288112 ], [ 0.181908251496171, 52.387450792886469 ], [ 0.181888674480116, 52.387453132551279 ], [ 0.181893565075046, 52.387488439436609 ], [ 0.181895076182682, 52.387499502042047 ], [ 0.181905387906481, 52.387571515932677 ], [ 0.18192446628759, 52.387570983835609 ], [ 0.182033028118828, 52.387567180942078 ], [ 0.182159208915414, 52.387563052599106 ], [ 0.182411836325307, 52.38756018568904 ], [ 0.182768886599386, 52.387558986205342 ], [ 0.182945386655112, 52.387562020194302 ], [ 0.183194185538157, 52.38757091169667 ], [ 0.183345902777191, 52.387577999667897 ], [ 0.183605245590232, 52.387592090587177 ], [ 0.183689334832228, 52.387598629377898 ], [ 0.183729066230211, 52.387599693542604 ], [ 0.183752558207251, 52.387599259426473 ], [ 0.183783214047835, 52.387595096192022 ], [ 0.184012748608083, 52.387600745241954 ], [ 0.184020267247469, 52.38760420301297 ], [ 0.184029254136584, 52.387607633647647 ], [ 0.184038019278063, 52.387606572469927 ], [ 0.184137899885507, 52.387635298637974 ], [ 0.184143861586963, 52.387636986813582 ], [ 0.184166107090269, 52.387641071563742 ], [ 0.184204325930574, 52.387641264343415 ], [ 0.184210110221841, 52.387639359066668 ], [ 0.184461372924345, 52.38765944214164 ], [ 0.18478560685286, 52.387716840434045 ], [ 0.185373335805406, 52.387833656819453 ], [ 0.186104820593226, 52.387974786483255 ], [ 0.188078663787624, 52.388364467880471 ], [ 0.18852550155665, 52.388455103521196 ], [ 0.188961707581854, 52.388538740960392 ], [ 0.18934011889897, 52.388612657359225 ], [ 0.18941220228523, 52.388626581013469 ], [ 0.189520327670163, 52.388647470903308 ], [ 0.189673145929052, 52.388677000968848 ], [ 0.189788374428354, 52.38869917071618 ], [ 0.189884668560453, 52.388717662889547 ], [ 0.189984689062981, 52.388737209906793 ], [ 0.190574028696501, 52.388853341364175 ], [ 0.190744462526504, 52.388886206786935 ], [ 0.190779104542085, 52.389061439395952 ], [ 0.191485094601462, 52.389074507311506 ], [ 0.191682209767347, 52.389068244984387 ], [ 0.192328334771586, 52.389194509423945 ], [ 0.193199945227792, 52.389371660754563 ], [ 0.193654362664641, 52.3894606078808 ], [ 0.19405423146492, 52.389540135523042 ], [ 0.194255000807628, 52.389581906501135 ], [ 0.194561561268334, 52.38964095511696 ], [ 0.194857697545684, 52.389700196553676 ], [ 0.194920337396057, 52.389709733409049 ], [ 0.194946024136105, 52.38971204378047 ], [ 0.194976328956943, 52.389709682532306 ], [ 0.195043375231328, 52.389717152978648 ], [ 0.195056025480092, 52.389718562611186 ], [ 0.19504216559309, 52.389766464208577 ], [ 0.194758814942195, 52.390808458832439 ], [ 0.194736107661376, 52.391327740055743 ], [ 0.194735504268685, 52.391938302266823 ], [ 0.19482498285858, 52.392764729464993 ], [ 0.194928136128871, 52.393390443134606 ], [ 0.19498663279343, 52.393651034984273 ], [ 0.195048037676243, 52.393911571881169 ], [ 0.195277143855921, 52.394738191465692 ], [ 0.1954788575463, 52.395308138872707 ], [ 0.195942308088755, 52.396677938780492 ], [ 0.196382495176906, 52.397610304212215 ], [ 0.196630185541482, 52.398039071364558 ], [ 0.196758901919956, 52.398292962828052 ], [ 0.196864312430036, 52.398550883211762 ], [ 0.197020060496453, 52.399021901820461 ], [ 0.19709705670085, 52.399192688052459 ], [ 0.197123136964353, 52.399253368252388 ], [ 0.19712544341666, 52.399261328092791 ], [ 0.197174585916879, 52.399392414386689 ], [ 0.197202951548853, 52.399475151275531 ], [ 0.197226815469827, 52.399541247067759 ], [ 0.197181778834358, 52.399551975381954 ], [ 0.197136697541906, 52.399561805327131 ], [ 0.197025840113793, 52.399579152344565 ], [ 0.196923749776404, 52.399595437100785 ], [ 0.196699186460617, 52.399631981939734 ], [ 0.196672974127752, 52.399636965068737 ], [ 0.196551925099236, 52.399656299437424 ], [ 0.196521262198856, 52.399660466070053 ], [ 0.196474578139298, 52.399667628004607 ], [ 0.196427804823341, 52.399672993215653 ], [ 0.196421974890597, 52.399674000747993 ], [ 0.196389754087041, 52.399676397936418 ], [ 0.196333945826475, 52.399677435113794 ], [ 0.196267812475351, 52.399677764963371 ], [ 0.196201768353655, 52.399679891481526 ], [ 0.196135858067757, 52.399684713021372 ], [ 0.196090508714152, 52.399689152455565 ], [ 0.196023263597517, 52.399696696282412 ], [ 0.195957576318153, 52.399706009488099 ], [ 0.195893491478782, 52.399717990428321 ], [ 0.195771374685796, 52.3997454364711 ], [ 0.195675470273206, 52.399767899485099 ], [ 0.195570932315235, 52.399794119542001 ], [ 0.195515837506486, 52.399809529986953 ], [ 0.195433239820321, 52.399833543960511 ], [ 0.195352199885721, 52.399859327302579 ], [ 0.195170361376901, 52.399927446100243 ], [ 0.194899383329896, 52.400035884985606 ], [ 0.194843176034203, 52.400058509229602 ], [ 0.194567567477449, 52.400162537433623 ], [ 0.194552605376637, 52.400167329162379 ], [ 0.194516922400144, 52.400178763961456 ], [ 0.194415292688384, 52.400215929573378 ], [ 0.194403634564363, 52.400209719590706 ], [ 0.194199437069751, 52.400300706403897 ], [ 0.193773569118869, 52.400457923359617 ], [ 0.192846675580288, 52.400828493246664 ], [ 0.192537485525073, 52.400965473558216 ], [ 0.192295328551091, 52.401063543751029 ], [ 0.192020916030231, 52.401161222614675 ], [ 0.191279439610089, 52.401416872821954 ], [ 0.190772599190844, 52.401571894549356 ], [ 0.190260050546779, 52.401670478406594 ], [ 0.190639786156123, 52.401888171004778 ], [ 0.191301878746646, 52.402402847864451 ], [ 0.192578951511995, 52.403285548345927 ], [ 0.193560222731044, 52.404010029617915 ], [ 0.196304022475033, 52.405884210204306 ], [ 0.197443584123277, 52.406715477197665 ], [ 0.199030117692379, 52.407814478901422 ], [ 0.200523315071126, 52.408865665323901 ], [ 0.202516321044888, 52.410296940111216 ], [ 0.203296426393867, 52.410814654756201 ], [ 0.202658950014056, 52.411210554731099 ], [ 0.202228041168787, 52.411533298120077 ], [ 0.201387996505814, 52.412085695818874 ], [ 0.200462595403214, 52.412726062764477 ], [ 0.19817106537115, 52.414281142368402 ], [ 0.198177670658872, 52.414294503647099 ], [ 0.198351819303151, 52.414485521966867 ], [ 0.198409528879957, 52.414542970069633 ], [ 0.19842217515033, 52.414551456020646 ], [ 0.198448133430078, 52.414570755207251 ], [ 0.198508602239654, 52.414633472399785 ], [ 0.198539548933151, 52.414664368144621 ], [ 0.198576506273145, 52.414697849624204 ], [ 0.198699221118955, 52.414799872059803 ], [ 0.198716007308371, 52.41481214835045 ], [ 0.19874356908342, 52.414834115189777 ], [ 0.198769706437314, 52.414857007702238 ], [ 0.198778968197281, 52.414865827229043 ], [ 0.198819668641245, 52.414915424274739 ], [ 0.198830354873157, 52.41492331811645 ], [ 0.198887081930981, 52.414969919450343 ], [ 0.198953294415718, 52.415029832018398 ], [ 0.198981124623195, 52.415057188899581 ], [ 0.199013496399102, 52.415087158826339 ], [ 0.199047113879533, 52.415112609659097 ], [ 0.199093020977116, 52.415148622014833 ], [ 0.19915024030278, 52.41520510506426 ], [ 0.199208660722104, 52.41525617064746 ], [ 0.199267304789468, 52.41531172794965 ], [ 0.199401067050498, 52.415428830194799 ], [ 0.199466923273969, 52.415481555650828 ], [ 0.199530923394362, 52.415535394628364 ], [ 0.199788687809717, 52.415727068883456 ], [ 0.200027890630102, 52.415944624830175 ], [ 0.200266011266137, 52.416169933402571 ], [ 0.200318975246044, 52.41621768311964 ], [ 0.200382734202573, 52.416278449826763 ], [ 0.200436857265408, 52.416331752840712 ], [ 0.200518068255499, 52.416409279033104 ], [ 0.200554551013525, 52.416456795967207 ], [ 0.200617531712001, 52.416537359035871 ], [ 0.200655116789909, 52.416595196006107 ], [ 0.200708168105814, 52.416650586968053 ], [ 0.200719357162174, 52.416663542662839 ], [ 0.200788382106569, 52.416743507545469 ], [ 0.200863179001555, 52.416839855907398 ], [ 0.200957275650978, 52.41695167044562 ], [ 0.201200243990998, 52.417247563030543 ], [ 0.201454596387299, 52.417564419316925 ], [ 0.201476185545284, 52.417591307465521 ], [ 0.201604189668255, 52.417746100741155 ], [ 0.201672837001662, 52.417810462544416 ], [ 0.201798174831807, 52.417749321170056 ], [ 0.202524181594136, 52.41741497491941 ], [ 0.203113291195161, 52.417143673007139 ], [ 0.20418497554236, 52.416661603225528 ], [ 0.204558835315816, 52.416485584620595 ], [ 0.205595121507338, 52.416011472602975 ], [ 0.20590066314748, 52.415871675712701 ], [ 0.20651509158814, 52.41559557784511 ], [ 0.206878614124826, 52.415433772020457 ], [ 0.2069642656782, 52.415396834916756 ], [ 0.206999671074452, 52.415381427238323 ], [ 0.207131961647155, 52.415321409349339 ], [ 0.20720393852024, 52.415290392268275 ], [ 0.209346993724183, 52.414300457229174 ], [ 0.209397000629061, 52.414277132836787 ], [ 0.211113483399602, 52.413492059262516 ], [ 0.211373948978184, 52.413378385280623 ], [ 0.211471688871698, 52.413333395810334 ], [ 0.211563417416659, 52.413285821187017 ], [ 0.211688934461532, 52.413237614246285 ], [ 0.211796642552107, 52.413186143697132 ], [ 0.211802815710506, 52.413183150793486 ], [ 0.212047885520556, 52.413064548144078 ], [ 0.212269176020581, 52.412961496333487 ], [ 0.212876123126402, 52.412690270649819 ], [ 0.212979871096479, 52.412647864980975 ], [ 0.214148683155607, 52.412110024158864 ], [ 0.21510123378555, 52.411667312218405 ], [ 0.216108317230801, 52.411201181667593 ], [ 0.217155991136901, 52.410706316186712 ], [ 0.218448632552054, 52.410120499426618 ], [ 0.218737575908765, 52.409980968053347 ], [ 0.220135782517154, 52.409335172828655 ], [ 0.220239993343897, 52.409947363508152 ], [ 0.220385704207496, 52.410565066130005 ], [ 0.220462174624202, 52.411061726138897 ], [ 0.220518286726563, 52.411418535198592 ], [ 0.220648237026464, 52.412161574255535 ], [ 0.220838598500046, 52.412905187539124 ], [ 0.220941107214669, 52.413306969652098 ], [ 0.221033225202254, 52.413805273914498 ], [ 0.22105415842739, 52.413792420590809 ], [ 0.221148331563248, 52.413746860803087 ], [ 0.221188837544286, 52.413675064063106 ], [ 0.221585323710665, 52.413371781322674 ], [ 0.221641648088701, 52.413322166751485 ], [ 0.221665583654074, 52.413301035633779 ], [ 0.221705227343443, 52.413270617426257 ], [ 0.221750882683197, 52.413242783770194 ], [ 0.221755154401958, 52.413240005925921 ], [ 0.221795339836567, 52.413220367728599 ], [ 0.221858759242435, 52.413194897696677 ], [ 0.221894853514643, 52.413181630660311 ], [ 0.221936869154488, 52.413169151495012 ], [ 0.222313109531856, 52.413077555313052 ], [ 0.22233482918982, 52.413070852680633 ], [ 0.222538578090771, 52.412999583046876 ], [ 0.222603375459575, 52.412972288323047 ], [ 0.222665053960626, 52.412941455463987 ], [ 0.222669325593211, 52.412938677586808 ], [ 0.22295608771676, 52.412793012222139 ], [ 0.223007843849856, 52.412769559258393 ], [ 0.22309854119737, 52.412730986941995 ], [ 0.223121594065307, 52.412721561529011 ], [ 0.223452062914161, 52.412567879418056 ], [ 0.223923850384046, 52.41238815882506 ], [ 0.224137560370072, 52.412310404626595 ], [ 0.22421259372999, 52.41228201720137 ], [ 0.2242586985143, 52.412263165938114 ], [ 0.224641276160169, 52.412093213669493 ], [ 0.22467870208429, 52.412077223132485 ], [ 0.224741801706367, 52.412045463211037 ], [ 0.224763249211594, 52.412033370121023 ], [ 0.224924681381312, 52.411939513822908 ], [ 0.224983418809539, 52.411908735060429 ], [ 0.22506787487933, 52.411863085161094 ], [ 0.225419822985118, 52.41169820275757 ], [ 0.225816402821124, 52.411514495103205 ], [ 0.2259571982544, 52.411448900713218 ], [ 0.226135910924373, 52.411371262300662 ], [ 0.226373352513177, 52.411277321194738 ], [ 0.226474353656707, 52.411233246908225 ], [ 0.226907672180057, 52.41104929302243 ], [ 0.227296927669255, 52.410878037052264 ], [ 0.22750057204486, 52.41079920735357 ], [ 0.227716940962237, 52.410713213732642 ], [ 0.227833953280863, 52.410665959080163 ], [ 0.227878678444152, 52.410646053327511 ], [ 0.228164130405466, 52.410510020782354 ], [ 0.228448480447831, 52.410378414312589 ], [ 0.228732589361092, 52.410247890701925 ], [ 0.229076307574834, 52.410083601730676 ], [ 0.229205261842464, 52.410028297523681 ], [ 0.229446937310407, 52.409925278278884 ], [ 0.229708131622264, 52.409812808519455 ], [ 0.230019591656163, 52.40968248508743 ], [ 0.230121071540397, 52.409639297716986 ], [ 0.230126117642856, 52.409637314214073 ], [ 0.230519323890106, 52.409501130939823 ], [ 0.230642437062223, 52.40944377727913 ], [ 0.230738856145515, 52.409402303405315 ], [ 0.230892696541184, 52.409330342218041 ], [ 0.231195967282686, 52.409203946727764 ], [ 0.231541643147517, 52.409037994798197 ], [ 0.231700149633425, 52.408965315075363 ], [ 0.231820637957332, 52.408908459647542 ], [ 0.231859074850994, 52.408889300609559 ], [ 0.23209092916242, 52.408798780771043 ], [ 0.23213575467088, 52.408780939714859 ], [ 0.23221374956962, 52.40874736594261 ], [ 0.232471483354274, 52.408630729745063 ], [ 0.23252639899552, 52.408603076655091 ], [ 0.232604696014971, 52.408569676744044 ], [ 0.232678278861607, 52.408536096056778 ], [ 0.232772152089869, 52.408499614361084 ], [ 0.232898675794503, 52.408454603007556 ], [ 0.233015948626304, 52.408404011444745 ], [ 0.233085857011637, 52.408373377309218 ], [ 0.2331751129605, 52.408327001496758 ], [ 0.233206429946006, 52.408306627714801 ], [ 0.233300698420369, 52.408251794645878 ], [ 0.233415031696752, 52.408186691329028 ], [ 0.233626161569885, 52.408058614078129 ], [ 0.233697517174784, 52.408015903074372 ], [ 0.233731570090883, 52.407994398420776 ], [ 0.233748710833434, 52.407984453201522 ], [ 0.233815128151693, 52.407940037055603 ], [ 0.233827848633038, 52.407929905594109 ], [ 0.23384478051629, 52.407915828032934 ], [ 0.233920044554252, 52.407860274532617 ], [ 0.234115461081769, 52.407720983661058 ], [ 0.234217559977229, 52.407637857180603 ], [ 0.234219810267354, 52.407635836432028 ], [ 0.234309244346143, 52.407569764085117 ], [ 0.23439720931009, 52.407503719434196 ], [ 0.234444728404186, 52.407466493958793 ], [ 0.23447354875773, 52.407443289602256 ], [ 0.234516529495276, 52.407403542228607 ], [ 0.23451927828219, 52.407400621852666 ], [ 0.23452350594978, 52.407396126914762 ], [ 0.234551919132337, 52.407361960112901 ], [ 0.234554629792399, 52.407357412922366 ], [ 0.234584137850278, 52.407318729464109 ], [ 0.234605250539113, 52.407288477248791 ], [ 0.23463345156069, 52.40725593297784 ], [ 0.23472229883203, 52.407160827537922 ], [ 0.234788771537814, 52.407090791824331 ], [ 0.234796420700711, 52.407082725349909 ], [ 0.234802468779515, 52.407077305787524 ], [ 0.234902249464413, 52.407006541399426 ], [ 0.234977383408919, 52.406957194047372 ], [ 0.235099353559148, 52.406883312381837 ], [ 0.23520356401138, 52.40681875830024 ], [ 0.235309394418294, 52.406754263407962 ], [ 0.235350070497926, 52.406730025363267 ], [ 0.235461062136009, 52.406660900808674 ], [ 0.235519686956362, 52.406624400008077 ], [ 0.235558300392609, 52.406602988385956 ], [ 0.235562896145687, 52.406600833334096 ], [ 0.235598064620633, 52.406583982801699 ], [ 0.235641008739008, 52.406566805364811 ], [ 0.235643900954633, 52.406565851475463 ], [ 0.235690382327359, 52.406551754289609 ], [ 0.235719941958335, 52.406543192433823 ], [ 0.235809789793327, 52.406520272203167 ], [ 0.236102111559079, 52.406454227381886 ], [ 0.236217351369711, 52.406430466833591 ], [ 0.236317589487264, 52.406409507710521 ], [ 0.23652950692356, 52.406361258239286 ], [ 0.236619098205849, 52.406344906328684 ], [ 0.236658366013456, 52.406323657295125 ], [ 0.237503889342013, 52.4060376100269 ], [ 0.237773024749553, 52.405954629273332 ] ] ]};
-
-  document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('demo-geojson').geojson = WITCHFORD_BOUNDARY;
-  });
-
-  function prefillDemo() {
-    document.getElementById('demo-api').prefill({
-      address: 'Buckingham Palace, London',
-      lat: 51.5014,
-      lng: -0.1419,
+    document.addEventListener("DOMContentLoaded", () => {
+      document.getElementById("demo-geojson").geojson = WITCHFORD_BOUNDARY;
     });
-  }
 
-  function clearDemo() {
-    document.getElementById('demo-api').clear();
-  }
+    // biome-ignore lint/correctness/noUnusedVariables: called from inline onclick
+    function prefillDemo() {
+      document.getElementById("demo-api").prefill({
+        address: "Buckingham Palace, London",
+        lat: 51.5014,
+        lng: -0.1419,
+      });
+    }
 
-  function readDemo() {
-    const f = document.getElementById('demo-api');
-    alert(`value: ${f.value}\nlat: ${f.lat}\nlng: ${f.lng}`);
-  }
+    // biome-ignore lint/correctness/noUnusedVariables: called from inline onclick
+    function clearDemo() {
+      document.getElementById("demo-api").clear();
+    }
 
-  const log = document.getElementById('event-log');
+    // biome-ignore lint/correctness/noUnusedVariables: called from inline onclick
+    function readDemo() {
+      const f = document.getElementById("demo-api");
+      const parts = [`address: ${f.address}`, `lat: ${f.lat}`, `lng: ${f.lng}`];
+      if (f.w3w) parts.push(`w3w: ${f.w3w}`);
+      alert(parts.join('\n'));
+    }
 
-  document.getElementById('demo-event').addEventListener('location-change', (e) => {
-    const { lat, lng, address, w3w } = e.detail;
-    const time = new Date().toLocaleTimeString();
-    log.textContent = [
-      `[${time}]`,
-      `lat: ${lat?.toFixed(5)}  lng: ${lng?.toFixed(5)}`,
-      address ? `address: ${address}` : null,
-      w3w     ? `w3w: ${w3w}`         : null,
-    ].filter(Boolean).join('\n');
-  });
-</script>
-</body>
+    const log = document.getElementById("event-log");
+
+    document
+      .getElementById("demo-event")
+      .addEventListener("location-change", (e) => {
+        const { lat, lng, address, w3w } = e.detail;
+        const time = new Date().toLocaleTimeString();
+        log.textContent = [
+          `[${time}]`,
+          `lat: ${lat?.toFixed(5)}  lng: ${lng?.toFixed(5)}`,
+          address ? `address: ${address}` : null,
+          w3w ? `w3w: ${w3w}` : null,
+        ]
+          .filter(Boolean)
+          .join("\n");
+      });
+    </script>
+  </body>
 </html>

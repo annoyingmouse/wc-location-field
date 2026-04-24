@@ -15,9 +15,7 @@
     "accessibility",
     "a11y"
   ],
-  "authors": [
-    "Dominic Myers"
-  ],
+  "authors": ["Dominic Myers"],
   "license": "MIT",
   "homepage": "https://github.com/annoyingmouse/wc-location-field"
 }

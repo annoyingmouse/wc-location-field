@@ -2,7 +2,7 @@
 
 [![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/@annoyingmouse/wc-location-field)
 
-A self-contained web component for location selection. Provides address search via [Nominatim](https://nominatim.org/) (OpenStreetMap), an optional [Leaflet](https://leafletjs.com/) map, browser geolocation, and optional [What3Words](https://what3words.com/developers) integration. No framework dependencies.
+A self-contained web component for location selection. Provides address search via [Nominatim](https://nominatim.org/) (OpenStreetMap) or [Google Maps](https://developers.google.com/maps), an optional interactive map, browser geolocation, and optional [What3Words](https://what3words.com/developers) integration. No framework dependencies.
 
 ## Installation
 
@@ -24,7 +24,7 @@ Or as a module:
 <wc-location-field label="From" placeholder="e.g. Paddington Station"></wc-location-field>
 ```
 
-With map:
+With map (Nominatim/Leaflet):
 
 ```html
 <wc-location-field
@@ -35,14 +35,27 @@ With map:
 ></wc-location-field>
 ```
 
+With Google Maps (Places Autocomplete + Google Maps map):
+
+```html
+<wc-location-field
+  label="Meeting point"
+  map-provider="google"
+  google-maps-key="YOUR_API_KEY"
+  show-map
+></wc-location-field>
+```
+
 ## Attributes
 
 | Attribute | Description |
 |---|---|
 | `label` | Field label text (reactive) |
 | `placeholder` | Input placeholder text (reactive) |
-| `center-lat` / `center-lng` | Map centre and Nominatim search bias |
-| `show-map` | Renders an interactive Leaflet map |
+| `center-lat` / `center-lng` | Map centre and search bias |
+| `show-map` | Renders an interactive map below the search box |
+| `map-provider` | `"nominatim"` (default) or `"google"` |
+| `google-maps-key` | Google Maps API key — required when `map-provider="google"` |
 | `w3w-key` | What3Words API key; enables `///word.word.word` search |
 | `radius-km` | Draws a circle overlay on the map (requires `show-map`, `center-lat`, `center-lng`) |
 
@@ -59,6 +72,7 @@ field.clear()
 
 // Read state
 console.log(field.value, field.lat, field.lng, field.address)
+// field.value returns What3Words address when resolved, else formatted address, else raw input
 
 // label and placeholder can also be set as JS properties
 field.label = 'Destination'
