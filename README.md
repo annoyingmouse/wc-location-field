@@ -111,6 +111,39 @@ wc-location-field {
 - Geolocation status and errors announced via `aria-live="assertive"`
 - GPS button has an accessible label
 
+## Development
+
+No build step required. Open `index.html` directly in a browser to develop and test.
+
+```bash
+npm run format   # format with Biome
+npm run lint     # lint with Biome
+npm test         # run tests with Web Test Runner
+```
+
+## Releasing
+
+Before releasing for the first time, authenticate with npm:
+
+```bash
+npm login
+```
+
+Then use one of the release scripts depending on the change:
+
+```bash
+npm run release:patch   # bug fixes (1.0.5 → 1.0.6)
+npm run release:minor   # new features (1.0.5 → 1.1.0)
+npm run release:major   # breaking changes (1.0.5 → 2.0.0)
+```
+
+Each script:
+1. Bumps the version in `package.json` and creates a git commit and tag
+2. Builds the minified dist (`dist/wc-location-field.min.js`) via Rollup
+3. Syncs the new version into `bower.json`
+4. Commits the build artifacts, pushes the commit and tags to GitHub
+5. Publishes the package to npm with public access
+
 ## Licence
 
 MIT
