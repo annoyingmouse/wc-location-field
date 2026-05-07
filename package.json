@@ -1,6 +1,6 @@
 {
   "name": "@annoyingmouse/wc-location-field",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "A web component for location selection with address search via Nominatim or Google Maps, an optional interactive map, browser geolocation, and What3Words support.",
   "main": "wc-location-field.js",
   "type": "module",
