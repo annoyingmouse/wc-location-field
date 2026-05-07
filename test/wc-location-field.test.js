@@ -148,19 +148,38 @@ describe("prefill()", () => {
 
   it("ignores w3w when no w3w-key attribute is set", async () => {
     const el = await fixture(html`<wc-location-field></wc-location-field>`);
-    el.prefill({ address: "Buckingham Palace", lat: 51.5014, lng: -0.1419, w3w: "filled.count.soap" });
+    el.prefill({
+      address: "Buckingham Palace",
+      lat: 51.5014,
+      lng: -0.1419,
+      w3w: "filled.count.soap",
+    });
     expect(el.w3w).to.be.null;
   });
 
   it("stores w3w when w3w-key attribute is set", async () => {
-    const el = await fixture(html`<wc-location-field w3w-key="TEST"></wc-location-field>`);
-    el.prefill({ address: "Buckingham Palace", lat: 51.5014, lng: -0.1419, w3w: "filled.count.soap" });
+    const el = await fixture(
+      html`<wc-location-field w3w-key="TEST"></wc-location-field>`,
+    );
+    el.prefill({
+      address: "Buckingham Palace",
+      lat: 51.5014,
+      lng: -0.1419,
+      w3w: "filled.count.soap",
+    });
     expect(el.w3w).to.equal("filled.count.soap");
   });
 
   it("value returns w3w when w3w-key is set and w3w is provided", async () => {
-    const el = await fixture(html`<wc-location-field w3w-key="TEST"></wc-location-field>`);
-    el.prefill({ address: "Buckingham Palace", lat: 51.5014, lng: -0.1419, w3w: "filled.count.soap" });
+    const el = await fixture(
+      html`<wc-location-field w3w-key="TEST"></wc-location-field>`,
+    );
+    el.prefill({
+      address: "Buckingham Palace",
+      lat: 51.5014,
+      lng: -0.1419,
+      w3w: "filled.count.soap",
+    });
     expect(el.value).to.equal("filled.count.soap");
   });
 });
@@ -934,6 +953,139 @@ describe("_geojsonCenter()", () => {
     const el = await fixture(html`<wc-location-field></wc-location-field>`);
     expect(el._geojsonCenter({ type: "FeatureCollection", features: [] })).to.be
       .null;
+  });
+});
+
+// ─── readonly ─────────────────────────────────────────────────────────────────
+
+describe("readonly", () => {
+  it("readonly getter returns true when the attribute is present", async () => {
+    const el = await fixture(
+      html`<wc-location-field readonly></wc-location-field>`,
+    );
+    expect(el.readonly).to.be.true;
+  });
+
+  it("readonly getter returns false when the attribute is absent", async () => {
+    const el = await fixture(html`<wc-location-field></wc-location-field>`);
+    expect(el.readonly).to.be.false;
+  });
+
+  it("does not render an input element", async () => {
+    const el = await fixture(
+      html`<wc-location-field readonly></wc-location-field>`,
+    );
+    expect(el.querySelector(".lf-input")).to.be.null;
+  });
+
+  it("does not render a GPS button", async () => {
+    const el = await fixture(
+      html`<wc-location-field readonly></wc-location-field>`,
+    );
+    expect(el.querySelector(".lf-gps-btn")).to.be.null;
+  });
+
+  it("does not render a coords element", async () => {
+    const el = await fixture(
+      html`<wc-location-field readonly></wc-location-field>`,
+    );
+    expect(el.querySelector(".lf-coords")).to.be.null;
+  });
+
+  it("does not render a status element", async () => {
+    const el = await fixture(
+      html`<wc-location-field readonly></wc-location-field>`,
+    );
+    expect(el.querySelector(".lf-status")).to.be.null;
+  });
+
+  it("does not render a suggestions list", async () => {
+    const el = await fixture(
+      html`<wc-location-field readonly></wc-location-field>`,
+    );
+    expect(el.querySelector(".lf-suggestions")).to.be.null;
+  });
+
+  it("renders a map container when show-map is also set", async () => {
+    const el = await fixture(
+      html`<wc-location-field readonly show-map></wc-location-field>`,
+    );
+    expect(el.querySelector(".lf-map-container")).to.exist;
+  });
+
+  it("does not render a map container when show-map is absent", async () => {
+    const el = await fixture(
+      html`<wc-location-field readonly></wc-location-field>`,
+    );
+    expect(el.querySelector(".lf-map-container")).to.be.null;
+  });
+
+  it("does not render the map hint paragraph", async () => {
+    const el = await fixture(
+      html`<wc-location-field readonly show-map></wc-location-field>`,
+    );
+    expect(el.querySelector(".lf-hint")).to.be.null;
+  });
+
+  it("still renders a label when the label attribute is set", async () => {
+    const el = await fixture(
+      html`<wc-location-field readonly label="Venue"></wc-location-field>`,
+    );
+    const label = el.querySelector(".lf-label");
+    expect(label).to.exist;
+    expect(label.textContent).to.equal("Venue");
+  });
+
+  it("label has no for attribute in readonly mode", async () => {
+    const el = await fixture(
+      html`<wc-location-field readonly label="Venue"></wc-location-field>`,
+    );
+    expect(el.querySelector(".lf-label").hasAttribute("for")).to.be.false;
+  });
+
+  it('map container has aria-label="Location map"', async () => {
+    const el = await fixture(
+      html`<wc-location-field readonly show-map></wc-location-field>`,
+    );
+    expect(
+      el.querySelector(".lf-map-container").getAttribute("aria-label"),
+    ).to.equal("Location map");
+  });
+
+  it("prefill() stores lat and lng", async () => {
+    const el = await fixture(
+      html`<wc-location-field readonly></wc-location-field>`,
+    );
+    el.prefill({ address: "Buckingham Palace", lat: 51.5014, lng: -0.1419 });
+    expect(el.lat).to.equal(51.5014);
+    expect(el.lng).to.equal(-0.1419);
+  });
+
+  it("prefill() stores address", async () => {
+    const el = await fixture(
+      html`<wc-location-field readonly></wc-location-field>`,
+    );
+    el.prefill({ address: "Buckingham Palace", lat: 51.5014, lng: -0.1419 });
+    expect(el.address).to.equal("Buckingham Palace");
+  });
+
+  it("value getter returns address from prefill", async () => {
+    const el = await fixture(
+      html`<wc-location-field readonly></wc-location-field>`,
+    );
+    el.prefill({ address: "Buckingham Palace", lat: 51.5014, lng: -0.1419 });
+    expect(el.value).to.equal("Buckingham Palace");
+  });
+
+  it("clear() resets lat, lng, and address", async () => {
+    const el = await fixture(
+      html`<wc-location-field readonly></wc-location-field>`,
+    );
+    el.prefill({ address: "Buckingham Palace", lat: 51.5014, lng: -0.1419 });
+    el.clear();
+    expect(el.lat).to.be.null;
+    expect(el.lng).to.be.null;
+    expect(el.address).to.equal("");
   });
 });
 

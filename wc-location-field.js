@@ -82,6 +82,11 @@ class LocationField extends HTMLElement {
     return this.getAttribute("google-maps-key") || null;
   }
 
+  /** Display-only mode — hides search UI and disables map click/drag interactions */
+  get readonly() {
+    return this.hasAttribute("readonly");
+  }
+
   /** GeoJSON object (or JSON string) — draws a polygon/feature overlay on the map */
   set geojson(val) {
     this._geojson = typeof val === "string" ? JSON.parse(val) : val;
@@ -200,6 +205,23 @@ class LocationField extends HTMLElement {
 
   _render() {
     const id = this._uid;
+
+    if (this.readonly) {
+      const labelHtml = this.label
+        ? `<label class="lf-label">${this._esc(this.label)}</label>`
+        : "";
+      const mapHtml = this.showMap
+        ? `<div class="lf-map-container" aria-label="Location map"><div class="lf-map"></div></div>`
+        : "";
+      this.innerHTML = `${labelHtml}${mapHtml}`;
+      this._labelEl = this.querySelector(".lf-label");
+      this._inputEl = null;
+      this._listEl = null;
+      this._coordEl = null;
+      this._statusEl = null;
+      return;
+    }
+
     const labelHtml = this.label
       ? `<label class="lf-label" for="${id}-input">${this._esc(this.label)}</label>`
       : "";
@@ -269,8 +291,14 @@ class LocationField extends HTMLElement {
       this._map = null;
     }
 
-    const centre = this._mapCentre();
-    this._map = L.map(el, { maxZoom: 19 }).setView(centre, 13);
+    const centre =
+      this.readonly && this._lat !== null
+        ? [this._lat, this._lng]
+        : this._mapCentre();
+    this._map = L.map(el, { maxZoom: 19 }).setView(
+      centre,
+      this.readonly ? 19 : 13,
+    );
 
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       attribution: "© OpenStreetMap contributors",
@@ -278,12 +306,16 @@ class LocationField extends HTMLElement {
     }).addTo(this._map);
 
     this._applyOverlay();
-    this._placeMarker(...centre);
 
-    this._map.on("click", async (e) => {
-      this._placeMarker(e.latlng.lat, e.latlng.lng);
-      await this._setFromCoords(e.latlng.lat, e.latlng.lng, false);
-    });
+    if (this.readonly) {
+      if (this._lat !== null) this._placeMarker(this._lat, this._lng);
+    } else {
+      this._placeMarker(...centre);
+      this._map.on("click", async (e) => {
+        this._placeMarker(e.latlng.lat, e.latlng.lng);
+        await this._setFromCoords(e.latlng.lat, e.latlng.lng, false);
+      });
+    }
 
     new ResizeObserver(() => this._map?.invalidateSize()).observe(el);
     this._map.invalidateSize();
@@ -298,22 +330,29 @@ class LocationField extends HTMLElement {
       this._map = null;
     }
 
-    const [lat, lng] = this._mapCentre();
+    const [lat, lng] =
+      this.readonly && this._lat !== null
+        ? [this._lat, this._lng]
+        : this._mapCentre();
     this._map = new google.maps.Map(el, {
       center: { lat, lng },
-      zoom: 13,
+      zoom: this.readonly ? 19 : 13,
       maxZoom: 19,
     });
 
     this._applyOverlay();
-    this._placeMarker(lat, lng);
 
-    this._map.addListener("click", async (e) => {
-      const lat = e.latLng.lat();
-      const lng = e.latLng.lng();
+    if (this.readonly) {
+      if (this._lat !== null) this._placeMarker(this._lat, this._lng);
+    } else {
       this._placeMarker(lat, lng);
-      await this._setFromCoords(lat, lng, false);
-    });
+      this._map.addListener("click", async (e) => {
+        const lat = e.latLng.lat();
+        const lng = e.latLng.lng();
+        this._placeMarker(lat, lng);
+        await this._setFromCoords(lat, lng, false);
+      });
+    }
 
     new ResizeObserver(() => {
       google.maps.event.trigger(this._map, "resize");
@@ -427,24 +466,28 @@ class LocationField extends HTMLElement {
         this._marker = new google.maps.Marker({
           map: this._map,
           position: { lat, lng },
-          draggable: true,
+          draggable: !this.readonly,
         });
-        this._marker.addListener("dragend", async () => {
-          const pos = this._marker.getPosition();
-          await this._setFromCoords(pos.lat(), pos.lng(), false);
-        });
+        if (!this.readonly) {
+          this._marker.addListener("dragend", async () => {
+            const pos = this._marker.getPosition();
+            await this._setFromCoords(pos.lat(), pos.lng(), false);
+          });
+        }
       }
     } else {
       if (this._marker) {
         this._marker.setLatLng([lat, lng]);
       } else {
-        this._marker = L.marker([lat, lng], { draggable: true }).addTo(
-          this._map,
-        );
-        this._marker.on("dragend", async () => {
-          const { lat, lng } = this._marker.getLatLng();
-          await this._setFromCoords(lat, lng, false);
-        });
+        this._marker = L.marker([lat, lng], {
+          draggable: !this.readonly,
+        }).addTo(this._map);
+        if (!this.readonly) {
+          this._marker.on("dragend", async () => {
+            const { lat, lng } = this._marker.getLatLng();
+            await this._setFromCoords(lat, lng, false);
+          });
+        }
       }
     }
   }

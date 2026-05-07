@@ -64,9 +64,10 @@
       <p>
         A self-contained web component for picking a location. Provides address
         search via
-        <a href="https://nominatim.org/">Nominatim</a> (OpenStreetMap), an
-        optional <a href="https://leafletjs.com/">Leaflet</a> map, browser
-        geolocation, and optional
+        <a href="https://nominatim.org/">Nominatim</a>
+        (OpenStreetMap), an optional
+        <a href="https://leafletjs.com/">Leaflet</a>
+        map, browser geolocation, and optional
         <a href="https://what3words.com/developers">What3Words</a>
         integration. No framework dependencies.
       </p>
@@ -98,11 +99,18 @@
         <li>
           <code>radius-km</code>
           — draws a circle overlay on the map (requires
-          <code>center-lat</code> / <code>center-lng</code>)
+          <code>center-lat</code>
+          / <code>center-lng</code>)
         </li>
         <li>
           <code>show-map</code>
           — renders an interactive Leaflet map below the search box
+        </li>
+        <li>
+          <code>readonly</code>
+          — hides the search input and GPS button; map click and marker drag are
+          disabled. Use with <code>show-map</code> and <code>prefill()</code> to
+          display a pinned location
         </li>
         <li>
           <code>w3w-key</code>
@@ -243,12 +251,33 @@ field.geojson = {
   radius-km="2.5"
 &gt;&lt;/wc-location-field&gt;</code></pre>
 
+      <h3>Display-only map</h3>
+
+      <p>
+        Add <code>readonly</code> to show a pinned map with no search UI or
+        interaction. The map zooms to maximum to show the exact location. Use
+        <code>prefill()</code>
+        to set the displayed pin.
+      </p>
+
+      <wc-location-field
+        id="demo-readonly"
+        label="Venue"
+        show-map
+        readonly
+        center-lat="51.5014"
+        center-lng="-0.1419"
+      ></wc-location-field>
+
+      <pre><code>const map = document.querySelector('#demo-readonly');
+map.prefill({ address: 'Buckingham Palace', lat: 51.5014, lng: -0.1419 });</code></pre>
+
       <h3>Public API</h3>
 
       <p>
         Use <code>prefill()</code>, <code>clear()</code>, and the
-        <code>value</code> / <code>lat</code> / <code>lng</code> getters from
-        JavaScript.
+        <code>value</code>
+        / <code>lat</code> / <code>lng</code> getters from JavaScript.
       </p>
 
       <wc-location-field
@@ -1273,6 +1302,11 @@ console.log(field.value, field.lat, field.lng);</code></pre>
 
     document.addEventListener("DOMContentLoaded", () => {
       document.getElementById("demo-geojson").geojson = WITCHFORD_BOUNDARY;
+      document.getElementById("demo-readonly").prefill({
+        address: "Buckingham Palace",
+        lat: 51.5014,
+        lng: -0.1419,
+      });
     });
 
     // biome-ignore lint/correctness/noUnusedVariables: called from inline onclick
@@ -1294,7 +1328,7 @@ console.log(field.value, field.lat, field.lng);</code></pre>
       const f = document.getElementById("demo-api");
       const parts = [`address: ${f.address}`, `lat: ${f.lat}`, `lng: ${f.lng}`];
       if (f.w3w) parts.push(`w3w: ${f.w3w}`);
-      alert(parts.join('\n'));
+      alert(parts.join("\n"));
     }
 
     const log = document.getElementById("event-log");

@@ -46,6 +46,21 @@ With Google Maps (Places Autocomplete + Google Maps map):
 ></wc-location-field>
 ```
 
+Display-only pinned map (no search UI, no click/drag):
+
+```html
+<wc-location-field
+  id="venue"
+  label="Venue"
+  show-map
+  readonly
+></wc-location-field>
+```
+
+```js
+document.querySelector('#venue').prefill({ address: 'Buckingham Palace', lat: 51.5014, lng: -0.1419 })
+```
+
 ## Attributes
 
 | Attribute | Description |
@@ -54,6 +69,7 @@ With Google Maps (Places Autocomplete + Google Maps map):
 | `placeholder` | Input placeholder text (reactive) |
 | `center-lat` / `center-lng` | Map centre and search bias |
 | `show-map` | Renders an interactive map below the search box |
+| `readonly` | Hides search UI and disables map click/drag; use with `show-map` and `prefill()` to display a pinned location |
 | `map-provider` | `"nominatim"` (default) or `"google"` |
 | `google-maps-key` | Google Maps API key — required when `map-provider="google"` |
 | `w3w-key` | What3Words API key; enables `///word.word.word` search |
@@ -110,6 +126,7 @@ wc-location-field {
 - Coordinates announced via `aria-live="polite"`
 - Geolocation status and errors announced via `aria-live="assertive"`
 - GPS button has an accessible label
+- In `readonly` mode the map container is labelled `aria-label="Location map"` for screen readers
 
 ## Development
 
