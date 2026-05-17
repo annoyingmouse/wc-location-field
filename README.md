@@ -4,6 +4,24 @@
 
 A self-contained web component for location selection. Provides address search via [Nominatim](https://nominatim.org/) (OpenStreetMap) or [Google Maps](https://developers.google.com/maps), an optional interactive map, browser geolocation, and optional [What3Words](https://what3words.com/developers) integration. No framework dependencies.
 
+## Demo
+
+```html
+<custom-element-demo>
+  <template>
+    <script src="https://unpkg.com/@annoyingmouse/wc-location-field/wc-location-field.js" defer></script>
+    <next-code-block></next-code-block>
+  </template>
+</custom-element-demo>
+```
+
+```html
+<wc-location-field
+  label="Find a location"
+  placeholder="e.g. Paddington Station"
+></wc-location-field>
+```
+
 ## Installation
 
 ```html

@@ -24,6 +24,8 @@ class LocationField extends HTMLElement {
     this._coordEl = null;
     this._statusEl = null;
     this._activeIdx = -1;
+    this._resizeObserver = null;
+    this._searchSeq = 0;
   }
 
   // ── Attribute accessors ───────────────────────────────────────────────────
@@ -89,7 +91,11 @@ class LocationField extends HTMLElement {
 
   /** GeoJSON object (or JSON string) — draws a polygon/feature overlay on the map */
   set geojson(val) {
-    this._geojson = typeof val === "string" ? JSON.parse(val) : val;
+    try {
+      this._geojson = typeof val === "string" ? JSON.parse(val) : val;
+    } catch {
+      return;
+    }
     if (this._map) this._applyOverlay();
   }
 
@@ -142,6 +148,18 @@ class LocationField extends HTMLElement {
           .then(() => this._initMap())
           .catch(() => {});
       }
+    }
+  }
+
+  disconnectedCallback() {
+    this._resizeObserver?.disconnect();
+    this._resizeObserver = null;
+    clearTimeout(this._timer);
+    if (this._map) {
+      if (this.mapProvider !== "google") this._map.remove();
+      this._map = null;
+      this._marker = null;
+      this._overlayLayer = null;
     }
   }
 
@@ -253,7 +271,7 @@ class LocationField extends HTMLElement {
         </button>
       </div>
       <p class="lf-coords" aria-live="polite"></p>
-      <p class="lf-status" role="status" aria-live="assertive" aria-atomic="true"></p>
+      <p class="lf-status" role="alert" aria-atomic="true"></p>
       ${mapHtml}
     `;
 
@@ -289,6 +307,8 @@ class LocationField extends HTMLElement {
     if (this._map) {
       this._map.remove();
       this._map = null;
+      this._marker = null;
+      this._overlayLayer = null;
     }
 
     const centre =
@@ -317,7 +337,11 @@ class LocationField extends HTMLElement {
       });
     }
 
-    new ResizeObserver(() => this._map?.invalidateSize()).observe(el);
+    this._resizeObserver?.disconnect();
+    this._resizeObserver = new ResizeObserver(() =>
+      this._map?.invalidateSize(),
+    );
+    this._resizeObserver.observe(el);
     this._map.invalidateSize();
   }
 
@@ -354,9 +378,11 @@ class LocationField extends HTMLElement {
       });
     }
 
-    new ResizeObserver(() => {
+    this._resizeObserver?.disconnect();
+    this._resizeObserver = new ResizeObserver(() => {
       google.maps.event.trigger(this._map, "resize");
-    }).observe(el);
+    });
+    this._resizeObserver.observe(el);
   }
 
   _mapCentre() {
@@ -544,7 +570,7 @@ class LocationField extends HTMLElement {
       } else if (geoResult.value?.display_name) {
         this._address = this._formatAddress(geoResult.value);
       }
-      this._inputEl.value = this._address;
+      if (this._inputEl) this._inputEl.value = this._address;
     }
     if (w3wResult?.status === "fulfilled" && w3wResult.value?.words) {
       this._w3w = `///${w3wResult.value.words}`;
@@ -616,20 +642,21 @@ class LocationField extends HTMLElement {
   }
 
   async _search(query) {
+    const seq = ++this._searchSeq;
     try {
       if (this.w3wKey && _looksLikeW3W(query)) {
-        await this._searchW3W(query);
+        await this._searchW3W(query, seq);
       } else if (this.mapProvider === "google") {
-        await this._searchGoogle(query);
+        await this._searchGoogle(query, seq);
       } else {
-        await this._searchNominatim(query);
+        await this._searchNominatim(query, seq);
       }
     } catch {
       // network error — fail silently
     }
   }
 
-  async _searchGoogle(query) {
+  async _searchGoogle(query, seq) {
     const { AutocompleteSuggestion } =
       await google.maps.importLibrary("places");
     const request = { input: query };
@@ -651,6 +678,7 @@ class LocationField extends HTMLElement {
       /* zero results */
     }
 
+    if (seq !== this._searchSeq) return;
     this._listEl.innerHTML = this._googleSuggestions.length
       ? this._googleSuggestions
           .map(
@@ -689,7 +717,7 @@ class LocationField extends HTMLElement {
     }
   }
 
-  async _searchW3W(query) {
+  async _searchW3W(query, seq) {
     const words = query.replace(/^\/\/\//, "");
     const params = new URLSearchParams({
       input: words,
@@ -702,6 +730,7 @@ class LocationField extends HTMLElement {
     const data = await fetch(
       `https://api.what3words.com/v3/autosuggest?${params}`,
     ).then((r) => r.json());
+    if (seq !== this._searchSeq) return;
     const suggestions = data.suggestions || [];
 
     this._listEl.innerHTML = suggestions.length
@@ -727,7 +756,7 @@ class LocationField extends HTMLElement {
     this._showSuggestions();
   }
 
-  async _searchNominatim(query) {
+  async _searchNominatim(query, seq) {
     const params = new URLSearchParams({
       q: query,
       format: "json",
@@ -741,10 +770,12 @@ class LocationField extends HTMLElement {
         `${this.centerLng - d},${this.centerLat + d},${this.centerLng + d},${this.centerLat - d}`,
       );
     }
-    this._results = await fetch(
+    const results = await fetch(
       `https://nominatim.openstreetmap.org/search?${params}`,
       { headers: { "Accept-Language": "en" } },
     ).then((r) => r.json());
+    if (seq !== this._searchSeq) return;
+    this._results = results;
 
     this._listEl.innerHTML = this._results.length
       ? this._results
@@ -944,7 +975,7 @@ function _ensureGoogleMaps(apiKey) {
 }
 
 function _looksLikeW3W(text) {
-  return /^(?:\/\/\/)?[a-z]+\.([a-z]+(\.([a-z]*))?)?$/i.test(text.trim());
+  return /^(?:\/\/\/)?[a-z]+\.[a-z]+\.[a-z]+$/i.test(text.trim());
 }
 
 const _crosshairSVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
@@ -1067,6 +1098,12 @@ wc-location-field[hidden] {
 .lf-hint {
   margin: 0.25rem 0 0;
   font-size: 0.8em;
+}
+
+.lf-nearby {
+  margin-left: 0.4rem;
+  font-size: 0.85em;
+  opacity: 0.65;
 }
 `);
 

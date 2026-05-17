@@ -334,11 +334,10 @@ describe("accessibility", () => {
     );
   });
 
-  it('status element has role="status" and aria-live="assertive"', async () => {
+  it('status element has role="alert"', async () => {
     const el = await fixture(html`<wc-location-field></wc-location-field>`);
     const status = el.querySelector(".lf-status");
-    expect(status.getAttribute("role")).to.equal("status");
-    expect(status.getAttribute("aria-live")).to.equal("assertive");
+    expect(status.getAttribute("role")).to.equal("alert");
   });
 
   it("GPS button has an aria-label", async () => {
@@ -1110,5 +1109,731 @@ describe("multiple instances", () => {
     expect(a.querySelector(".lf-input").id).to.not.equal(
       b.querySelector(".lf-input").id,
     );
+  });
+});
+
+// ─── _esc() ───────────────────────────────────────────────────────────────────
+
+describe("_esc()", () => {
+  it("escapes ampersands", async () => {
+    const el = await fixture(html`<wc-location-field></wc-location-field>`);
+    expect(el._esc("a & b")).to.equal("a &amp; b");
+  });
+
+  it("escapes less-than signs", async () => {
+    const el = await fixture(html`<wc-location-field></wc-location-field>`);
+    expect(el._esc("<script>")).to.equal("&lt;script&gt;");
+  });
+
+  it("escapes greater-than signs", async () => {
+    const el = await fixture(html`<wc-location-field></wc-location-field>`);
+    expect(el._esc(">")).to.equal("&gt;");
+  });
+
+  it("escapes double quotes", async () => {
+    const el = await fixture(html`<wc-location-field></wc-location-field>`);
+    expect(el._esc('"hello"')).to.equal("&quot;hello&quot;");
+  });
+
+  it("escapes all special characters in a combined XSS string", async () => {
+    const el = await fixture(html`<wc-location-field></wc-location-field>`);
+    expect(el._esc('<div class="a&b">')).to.equal(
+      "&lt;div class=&quot;a&amp;b&quot;&gt;",
+    );
+  });
+
+  it("converts numbers to string before escaping", async () => {
+    const el = await fixture(html`<wc-location-field></wc-location-field>`);
+    expect(el._esc(42)).to.equal("42");
+  });
+
+  it("converts null to string before escaping", async () => {
+    const el = await fixture(html`<wc-location-field></wc-location-field>`);
+    expect(el._esc(null)).to.equal("null");
+  });
+
+  it("returns plain text unchanged", async () => {
+    const el = await fixture(html`<wc-location-field></wc-location-field>`);
+    expect(el._esc("safe text")).to.equal("safe text");
+  });
+});
+
+// ─── _formatAddress() ─────────────────────────────────────────────────────────
+
+describe("_formatAddress()", () => {
+  it("returns road and city when both are present", async () => {
+    const el = await fixture(html`<wc-location-field></wc-location-field>`);
+    expect(
+      el._formatAddress({ address: { road: "High Street", city: "London" } }),
+    ).to.equal("High Street, London");
+  });
+
+  it("uses town when city is absent", async () => {
+    const el = await fixture(html`<wc-location-field></wc-location-field>`);
+    expect(
+      el._formatAddress({
+        address: { road: "High Street", town: "Cambridge" },
+      }),
+    ).to.equal("High Street, Cambridge");
+  });
+
+  it("prefers village over town", async () => {
+    const el = await fixture(html`<wc-location-field></wc-location-field>`);
+    expect(
+      el._formatAddress({
+        address: { road: "Church Lane", village: "Witchford", town: "Ely" },
+      }),
+    ).to.equal("Church Lane, Witchford");
+  });
+
+  it("uses path when road is absent", async () => {
+    const el = await fixture(html`<wc-location-field></wc-location-field>`);
+    expect(
+      el._formatAddress({ address: { path: "Canal Path", city: "Oxford" } }),
+    ).to.equal("Canal Path, Oxford");
+  });
+
+  it("returns road only when no locality is present", async () => {
+    const el = await fixture(html`<wc-location-field></wc-location-field>`);
+    expect(el._formatAddress({ address: { road: "Some Road" } })).to.equal(
+      "Some Road",
+    );
+  });
+
+  it("falls back to the first two parts of display_name when address parts are empty", async () => {
+    const el = await fixture(html`<wc-location-field></wc-location-field>`);
+    expect(
+      el._formatAddress({
+        address: {},
+        display_name: "Buckingham Palace, Westminster, London, England",
+      }),
+    ).to.equal("Buckingham Palace, Westminster");
+  });
+
+  it("falls back to display_name when address object is absent", async () => {
+    const el = await fixture(html`<wc-location-field></wc-location-field>`);
+    expect(
+      el._formatAddress({ display_name: "A Place, City, Country" }),
+    ).to.equal("A Place, City");
+  });
+});
+
+// ─── geojson setter error handling ───────────────────────────────────────────
+
+describe("geojson setter error handling", () => {
+  it("does not throw when given a malformed JSON string", async () => {
+    const el = await fixture(html`<wc-location-field></wc-location-field>`);
+    expect(() => {
+      el.geojson = "{bad json}";
+    }).to.not.throw();
+  });
+
+  it("leaves _geojson unchanged when given a malformed JSON string", async () => {
+    const el = await fixture(html`<wc-location-field></wc-location-field>`);
+    const POLYGON = { type: "Polygon", coordinates: [] };
+    el.geojson = POLYGON;
+    el.geojson = "{bad json}";
+    expect(el.geojson).to.deep.equal(POLYGON);
+  });
+
+  it("accepts a valid JSON string and parses it", async () => {
+    const el = await fixture(html`<wc-location-field></wc-location-field>`);
+    const POLYGON = { type: "Polygon", coordinates: [] };
+    el.geojson = JSON.stringify(POLYGON);
+    expect(el.geojson).to.deep.equal(POLYGON);
+  });
+});
+
+// ─── clear() closes suggestions ──────────────────────────────────────────────
+
+describe("clear() closes suggestions", () => {
+  it("hides the suggestions dropdown", async () => {
+    const el = await fixture(html`<wc-location-field></wc-location-field>`);
+    el._listEl.style.display = "block";
+    el._inputEl.setAttribute("aria-expanded", "true");
+    el.clear();
+    expect(el.querySelector(".lf-suggestions").style.display).to.equal("none");
+  });
+
+  it("sets aria-expanded to false after clear", async () => {
+    const el = await fixture(html`<wc-location-field></wc-location-field>`);
+    el._inputEl.setAttribute("aria-expanded", "true");
+    el.clear();
+    expect(
+      el.querySelector(".lf-input").getAttribute("aria-expanded"),
+    ).to.equal("false");
+  });
+});
+
+// ─── disconnectedCallback ─────────────────────────────────────────────────────
+
+describe("disconnectedCallback", () => {
+  it("calls disconnect() on the ResizeObserver and nulls the reference", async () => {
+    const container = await fixture(
+      html`<div><wc-location-field></wc-location-field></div>`,
+    );
+    const el = container.querySelector("wc-location-field");
+    let disconnected = false;
+    el._resizeObserver = {
+      disconnect: () => {
+        disconnected = true;
+      },
+    };
+    container.removeChild(el);
+    expect(disconnected).to.be.true;
+    expect(el._resizeObserver).to.be.null;
+  });
+
+  it("sets _map to null and calls remove() on a Leaflet map", async () => {
+    const container = await fixture(
+      html`<div><wc-location-field></wc-location-field></div>`,
+    );
+    const el = container.querySelector("wc-location-field");
+    let removed = false;
+    el._map = {
+      remove: () => {
+        removed = true;
+      },
+    };
+    container.removeChild(el);
+    expect(removed).to.be.true;
+    expect(el._map).to.be.null;
+  });
+
+  it("nulls _marker and _overlayLayer when a map is active", async () => {
+    const container = await fixture(
+      html`<div><wc-location-field></wc-location-field></div>`,
+    );
+    const el = container.querySelector("wc-location-field");
+    el._map = { remove: () => {} };
+    el._marker = {};
+    el._overlayLayer = {};
+    container.removeChild(el);
+    expect(el._marker).to.be.null;
+    expect(el._overlayLayer).to.be.null;
+  });
+
+  it("cancels the debounce timer so no search fires after disconnect", async () => {
+    const container = await fixture(
+      html`<div><wc-location-field></wc-location-field></div>`,
+    );
+    const el = container.querySelector("wc-location-field");
+    let timerFired = false;
+    el._timer = setTimeout(() => {
+      timerFired = true;
+    }, 100);
+    container.removeChild(el);
+    await new Promise((r) => setTimeout(r, 200));
+    expect(timerFired).to.be.false;
+  });
+});
+
+// ─── search sequence counter (race condition) ─────────────────────────────────
+
+describe("search sequence counter", () => {
+  let originalFetch;
+
+  beforeEach(() => {
+    originalFetch = window.fetch;
+  });
+
+  afterEach(() => {
+    window.fetch = originalFetch;
+  });
+
+  it("starts at zero", async () => {
+    const el = await fixture(html`<wc-location-field></wc-location-field>`);
+    expect(el._searchSeq).to.equal(0);
+  });
+
+  it("increments with each search", async () => {
+    window.fetch = () => Promise.resolve({ json: () => Promise.resolve([]) });
+    const el = await fixture(html`<wc-location-field></wc-location-field>`);
+    el.querySelector(".lf-input").value = "Lond";
+    el.querySelector(".lf-input").dispatchEvent(new Event("input"));
+    await new Promise((r) => setTimeout(r, 400));
+    expect(el._searchSeq).to.equal(1);
+  });
+
+  it("discards results from a superseded search", async () => {
+    let resolveStale;
+    let callCount = 0;
+
+    window.fetch = () => {
+      callCount++;
+      if (callCount === 1) {
+        return new Promise((resolve) => {
+          resolveStale = () =>
+            resolve({
+              json: () =>
+                Promise.resolve([
+                  {
+                    display_name: "Stale Result, Nowhere",
+                    address: { road: "Stale Road", city: "Nowhere" },
+                    lat: "50.0",
+                    lon: "0.0",
+                  },
+                ]),
+            });
+        });
+      }
+      return Promise.resolve({
+        json: () =>
+          Promise.resolve([
+            {
+              display_name: "Fresh Result, London",
+              address: { road: "Fresh Road", city: "London" },
+              lat: "51.5",
+              lon: "-0.1",
+            },
+          ]),
+      });
+    };
+
+    const el = await fixture(html`<wc-location-field></wc-location-field>`);
+    const input = el.querySelector(".lf-input");
+
+    input.value = "Stale";
+    input.dispatchEvent(new Event("input"));
+    await new Promise((r) => setTimeout(r, 400));
+
+    input.value = "Fresh";
+    input.dispatchEvent(new Event("input"));
+    await new Promise((r) => setTimeout(r, 400));
+
+    resolveStale();
+    await new Promise((r) => setTimeout(r, 50));
+
+    const items = el.querySelectorAll(
+      ".lf-suggestions li[role='option']:not([aria-disabled])",
+    );
+    expect(items[0].textContent.trim()).to.equal("Fresh Road, London");
+  });
+});
+
+// ─── W3W pattern detection ────────────────────────────────────────────────────
+
+describe("W3W pattern detection", () => {
+  let originalFetch;
+
+  beforeEach(() => {
+    originalFetch = window.fetch;
+  });
+
+  afterEach(() => {
+    window.fetch = originalFetch;
+  });
+
+  async function searchAndCaptureUrl(el, query) {
+    let calledUrl = "";
+    window.fetch = (url) => {
+      calledUrl = String(url);
+      if (calledUrl.includes("what3words")) {
+        return Promise.resolve({
+          json: () => Promise.resolve({ suggestions: [] }),
+        });
+      }
+      return Promise.resolve({ json: () => Promise.resolve([]) });
+    };
+    el.querySelector(".lf-input").value = query;
+    el.querySelector(".lf-input").dispatchEvent(new Event("input"));
+    await new Promise((r) => setTimeout(r, 400));
+    return calledUrl;
+  }
+
+  it("routes three dot-separated words to the W3W endpoint", async () => {
+    const el = await fixture(
+      html`<wc-location-field w3w-key="TEST"></wc-location-field>`,
+    );
+    const url = await searchAndCaptureUrl(el, "word.word.word");
+    expect(url).to.include("what3words.com");
+  });
+
+  it("routes ///word.word.word to the W3W endpoint", async () => {
+    const el = await fixture(
+      html`<wc-location-field w3w-key="TEST"></wc-location-field>`,
+    );
+    const url = await searchAndCaptureUrl(el, "///word.word.word");
+    expect(url).to.include("what3words.com");
+  });
+
+  it("routes two-word input to Nominatim even with w3w-key set", async () => {
+    const el = await fixture(
+      html`<wc-location-field w3w-key="TEST"></wc-location-field>`,
+    );
+    const url = await searchAndCaptureUrl(el, "two.words");
+    expect(url).to.include("nominatim");
+  });
+
+  it("routes plain text to Nominatim even with w3w-key set", async () => {
+    const el = await fixture(
+      html`<wc-location-field w3w-key="TEST"></wc-location-field>`,
+    );
+    const url = await searchAndCaptureUrl(el, "London Bridge");
+    expect(url).to.include("nominatim");
+  });
+
+  it("routes three dot-separated words to Nominatim when no w3w-key is set", async () => {
+    const el = await fixture(html`<wc-location-field></wc-location-field>`);
+    const url = await searchAndCaptureUrl(el, "word.word.word");
+    expect(url).to.include("nominatim");
+  });
+});
+
+// ─── W3W search results ───────────────────────────────────────────────────────
+
+describe("W3W search results", () => {
+  let originalFetch;
+
+  beforeEach(() => {
+    originalFetch = window.fetch;
+    window.fetch = () =>
+      Promise.resolve({
+        json: () =>
+          Promise.resolve({
+            suggestions: [
+              { words: "filled.count.soap", nearestPlace: "London, UK" },
+              { words: "index.home.raft", nearestPlace: "London, UK" },
+            ],
+          }),
+      });
+  });
+
+  afterEach(() => {
+    window.fetch = originalFetch;
+  });
+
+  async function openW3WSuggestions(el) {
+    el.querySelector(".lf-input").value = "filled.count.soap";
+    el.querySelector(".lf-input").dispatchEvent(new Event("input"));
+    await new Promise((r) => setTimeout(r, 400));
+  }
+
+  it("renders the /// prefix element for each suggestion", async () => {
+    const el = await fixture(
+      html`<wc-location-field w3w-key="TEST"></wc-location-field>`,
+    );
+    await openW3WSuggestions(el);
+    const prefixes = el.querySelectorAll(".lf-w3w-prefix");
+    expect(prefixes.length).to.equal(2);
+    expect(prefixes[0].textContent).to.equal("///");
+  });
+
+  it("renders the nearest place for each suggestion", async () => {
+    const el = await fixture(
+      html`<wc-location-field w3w-key="TEST"></wc-location-field>`,
+    );
+    await openW3WSuggestions(el);
+    expect(el.querySelector(".lf-nearby")).to.exist;
+    expect(el.querySelector(".lf-nearby").textContent).to.equal("London, UK");
+  });
+
+  it("stores data-w3w on each suggestion item", async () => {
+    const el = await fixture(
+      html`<wc-location-field w3w-key="TEST"></wc-location-field>`,
+    );
+    await openW3WSuggestions(el);
+    const items = el.querySelectorAll(
+      ".lf-suggestions li[role='option']:not([aria-disabled])",
+    );
+    expect(items[0].dataset.w3w).to.equal("filled.count.soap");
+    expect(items[1].dataset.w3w).to.equal("index.home.raft");
+  });
+
+  it("renders a no-results item when W3W returns no suggestions", async () => {
+    window.fetch = () =>
+      Promise.resolve({ json: () => Promise.resolve({ suggestions: [] }) });
+    const el = await fixture(
+      html`<wc-location-field w3w-key="TEST"></wc-location-field>`,
+    );
+    await openW3WSuggestions(el);
+    expect(el.querySelector(".lf-no-results")).to.exist;
+  });
+});
+
+// ─── _selectW3W() ────────────────────────────────────────────────────────────
+
+describe("_selectW3W()", () => {
+  let originalFetch;
+
+  beforeEach(() => {
+    originalFetch = window.fetch;
+    window.fetch = (url) => {
+      if (String(url).includes("convert-to-coordinates")) {
+        return Promise.resolve({
+          json: () =>
+            Promise.resolve({
+              coordinates: { lat: 51.5208, lng: -0.1967 },
+              words: "filled.count.soap",
+            }),
+        });
+      }
+      if (String(url).includes("nominatim")) {
+        return Promise.resolve({
+          json: () =>
+            Promise.resolve({
+              display_name: "Paddington, London",
+              address: { suburb: "Paddington", city: "London" },
+            }),
+        });
+      }
+      return Promise.resolve({ json: () => Promise.resolve({}) });
+    };
+  });
+
+  afterEach(() => {
+    window.fetch = originalFetch;
+  });
+
+  it("fires location-change with the resolved coordinates", async () => {
+    const el = await fixture(
+      html`<wc-location-field w3w-key="TEST"></wc-location-field>`,
+    );
+    let detail = null;
+    el.addEventListener("location-change", (e) => {
+      detail = e.detail;
+    });
+    await el._selectW3W("filled.count.soap");
+    expect(detail).to.exist;
+    expect(detail.lat).to.equal(51.5208);
+    expect(detail.lng).to.equal(-0.1967);
+  });
+
+  it("sets _w3w to the /// prefixed form", async () => {
+    const el = await fixture(
+      html`<wc-location-field w3w-key="TEST"></wc-location-field>`,
+    );
+    await el._selectW3W("filled.count.soap");
+    expect(el.w3w).to.equal("///filled.count.soap");
+  });
+
+  it("updates the input to the reverse-geocoded address after selection", async () => {
+    const el = await fixture(
+      html`<wc-location-field w3w-key="TEST"></wc-location-field>`,
+    );
+    await el._selectW3W("filled.count.soap");
+    // _setFromCoords overwrites the input with the street address from reverse geocode
+    // _formatAddress returns suburb only when no road is present; city is the second part
+    expect(el.querySelector(".lf-input").value).to.equal("Paddington");
+  });
+
+  it("does not fire location-change when the API returns no coordinates", async () => {
+    window.fetch = () => Promise.resolve({ json: () => Promise.resolve({}) });
+    const el = await fixture(
+      html`<wc-location-field w3w-key="TEST"></wc-location-field>`,
+    );
+    let fired = false;
+    el.addEventListener("location-change", () => {
+      fired = true;
+    });
+    await el._selectW3W("invalid.w3w.address");
+    expect(fired).to.be.false;
+  });
+
+  it("hides the suggestions list after selection", async () => {
+    const el = await fixture(
+      html`<wc-location-field w3w-key="TEST"></wc-location-field>`,
+    );
+    el._listEl.style.display = "block";
+    await el._selectW3W("filled.count.soap");
+    expect(el.querySelector(".lf-suggestions").style.display).to.equal("none");
+  });
+});
+
+// ─── geolocation ─────────────────────────────────────────────────────────────
+
+describe("geolocation", () => {
+  let originalFetch;
+  let originalGeolocation;
+
+  beforeEach(() => {
+    originalFetch = window.fetch;
+    originalGeolocation = navigator.geolocation;
+    window.fetch = (url) => {
+      if (String(url).includes("nominatim")) {
+        return Promise.resolve({
+          json: () =>
+            Promise.resolve({
+              display_name: "Test Place, London",
+              address: { road: "Test Road", city: "London" },
+            }),
+        });
+      }
+      return Promise.resolve({ json: () => Promise.resolve({}) });
+    };
+  });
+
+  afterEach(() => {
+    window.fetch = originalFetch;
+    Object.defineProperty(navigator, "geolocation", {
+      value: originalGeolocation,
+      configurable: true,
+    });
+  });
+
+  function mockGeolocation(
+    success,
+    coords = { latitude: 51.5, longitude: -0.1 },
+  ) {
+    Object.defineProperty(navigator, "geolocation", {
+      value: {
+        getCurrentPosition: (resolve, reject) => {
+          if (success) resolve({ coords });
+          else reject(new Error("denied"));
+        },
+      },
+      configurable: true,
+    });
+  }
+
+  it("fires location-change with the device coordinates on success", async () => {
+    mockGeolocation(true, { latitude: 51.5, longitude: -0.1 });
+    const el = await fixture(html`<wc-location-field></wc-location-field>`);
+    let detail = null;
+    el.addEventListener("location-change", (e) => {
+      detail = e.detail;
+    });
+    await el._useGeolocation();
+    expect(detail).to.exist;
+    expect(detail.lat).to.equal(51.5);
+    expect(detail.lng).to.equal(-0.1);
+  });
+
+  it("sets an error status message on failure", async () => {
+    mockGeolocation(false);
+    const el = await fixture(html`<wc-location-field></wc-location-field>`);
+    await el._useGeolocation();
+    expect(el.querySelector(".lf-status").textContent).to.include(
+      "Couldn't get",
+    );
+  });
+
+  it("sets status to 'Getting your location…' while the request is in flight", async () => {
+    let resolveFn;
+    Object.defineProperty(navigator, "geolocation", {
+      value: {
+        getCurrentPosition: (resolve) => {
+          resolveFn = resolve;
+        },
+      },
+      configurable: true,
+    });
+    const el = await fixture(html`<wc-location-field></wc-location-field>`);
+    const promise = el._useGeolocation();
+    expect(el.querySelector(".lf-status").textContent).to.include("Getting");
+    resolveFn({ coords: { latitude: 51.5, longitude: -0.1 } });
+    await promise;
+  });
+
+  it("disables the GPS button while the request is in flight", async () => {
+    let resolveFn;
+    Object.defineProperty(navigator, "geolocation", {
+      value: {
+        getCurrentPosition: (resolve) => {
+          resolveFn = resolve;
+        },
+      },
+      configurable: true,
+    });
+    const el = await fixture(html`<wc-location-field></wc-location-field>`);
+    const btn = el.querySelector(".lf-gps-btn");
+    const promise = el._useGeolocation();
+    expect(btn.disabled).to.be.true;
+    resolveFn({ coords: { latitude: 51.5, longitude: -0.1 } });
+    await promise;
+  });
+
+  it("re-enables the GPS button after success", async () => {
+    mockGeolocation(true, { latitude: 51.5, longitude: -0.1 });
+    const el = await fixture(html`<wc-location-field></wc-location-field>`);
+    await el._useGeolocation();
+    expect(el.querySelector(".lf-gps-btn").disabled).to.be.false;
+  });
+
+  it("re-enables the GPS button after failure", async () => {
+    mockGeolocation(false);
+    const el = await fixture(html`<wc-location-field></wc-location-field>`);
+    await el._useGeolocation();
+    expect(el.querySelector(".lf-gps-btn").disabled).to.be.false;
+  });
+
+  it("sets a status message when geolocation is not supported", async () => {
+    Object.defineProperty(navigator, "geolocation", {
+      value: undefined,
+      configurable: true,
+    });
+    const el = await fixture(html`<wc-location-field></wc-location-field>`);
+    await el._useGeolocation();
+    expect(el.querySelector(".lf-status").textContent).to.include(
+      "doesn't support",
+    );
+  });
+});
+
+// ─── reactive map attributes ──────────────────────────────────────────────────
+
+describe("reactive map attributes", () => {
+  it("does not call _initMap when center-lat changes and no map is active", async () => {
+    const el = await fixture(
+      html`<wc-location-field center-lat="51.5"></wc-location-field>`,
+    );
+    let called = false;
+    el._initMap = () => {
+      called = true;
+    };
+    el.setAttribute("center-lat", "52.0");
+    expect(called).to.be.false;
+  });
+
+  it("calls _initMap when center-lat changes and a map is active", async () => {
+    const el = await fixture(
+      html`<wc-location-field center-lat="51.5"></wc-location-field>`,
+    );
+    let called = false;
+    el._map = { remove: () => {} };
+    el._initMap = () => {
+      called = true;
+    };
+    el.setAttribute("center-lat", "52.0");
+    expect(called).to.be.true;
+  });
+
+  it("calls _initMap when center-lng changes and a map is active", async () => {
+    const el = await fixture(
+      html`<wc-location-field center-lng="-0.09"></wc-location-field>`,
+    );
+    let called = false;
+    el._map = { remove: () => {} };
+    el._initMap = () => {
+      called = true;
+    };
+    el.setAttribute("center-lng", "0.12");
+    expect(called).to.be.true;
+  });
+
+  it("calls _initMap when radius-km changes and a map is active", async () => {
+    const el = await fixture(
+      html`<wc-location-field radius-km="5"></wc-location-field>`,
+    );
+    let called = false;
+    el._map = { remove: () => {} };
+    el._initMap = () => {
+      called = true;
+    };
+    el.setAttribute("radius-km", "10");
+    expect(called).to.be.true;
+  });
+
+  it("does not call _initMap when the same value is set again", async () => {
+    const el = await fixture(
+      html`<wc-location-field center-lat="51.5"></wc-location-field>`,
+    );
+    let called = false;
+    el._map = { remove: () => {} };
+    el._initMap = () => {
+      called = true;
+    };
+    el.setAttribute("center-lat", "51.5");
+    expect(called).to.be.false;
   });
 });
