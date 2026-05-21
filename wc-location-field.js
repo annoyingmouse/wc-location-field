@@ -200,6 +200,10 @@ class LocationField extends HTMLElement {
   }
 
   prefill({ address = "", lat = null, lng = null, w3w = "" } = {}) {
+    if (lat !== null && !this._map) {
+      this._pendingPrefill = { address, lat, lng, w3w };
+      return;
+    }
     this._address = address;
     this._lat = lat;
     this._lng = lng;
@@ -343,6 +347,11 @@ class LocationField extends HTMLElement {
     );
     this._resizeObserver.observe(el);
     this._map.invalidateSize();
+    if (this._pendingPrefill) {
+      const p = this._pendingPrefill;
+      this._pendingPrefill = null;
+      this.prefill(p);
+    }
   }
 
   _initMapGoogle() {
@@ -383,6 +392,11 @@ class LocationField extends HTMLElement {
       google.maps.event.trigger(this._map, "resize");
     });
     this._resizeObserver.observe(el);
+    if (this._pendingPrefill) {
+      const p = this._pendingPrefill;
+      this._pendingPrefill = null;
+      this.prefill(p);
+    }
   }
 
   _mapCentre() {
