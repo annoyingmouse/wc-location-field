@@ -200,10 +200,6 @@ class LocationField extends HTMLElement {
   }
 
   prefill({ address = "", lat = null, lng = null, w3w = "" } = {}) {
-    if (lat !== null && !this._map) {
-      this._pendingPrefill = { address, lat, lng, w3w };
-      return;
-    }
     this._address = address;
     this._lat = lat;
     this._lng = lng;
@@ -220,6 +216,8 @@ class LocationField extends HTMLElement {
         this._map.setView([lat, lng], Math.max(this._map.getZoom(), 16));
       }
       this._placeMarker(lat, lng);
+    } else if (lat !== null && !this._map) {
+      this._pendingPrefill = { address, lat, lng, w3w };
     }
   }
 
